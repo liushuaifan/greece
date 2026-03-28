@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telesterion · Eleusinian Mysteries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#080603;--ink2:#12100a;--ink3:#1c1810;
+  --stone:#c8b89a;--stone2:#8a7560;--stone3:#e8ddd0;
+  --gold:#b8943f;--goldL:#d4b060;--goldD:#7a6028;
+  --ember:#c8521a;--blue:#1a2a4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);}
+body{font-family:'Noto Serif SC','Cormorant Garamond',serif;color:var(--stone3);cursor:none;}
+
+/* CURSOR */
+#cur{position:fixed;width:7px;height:7px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:screen;}
+#cur2{position:fixed;width:28px;height:28px;border-radius:50%;border:1px solid rgba(184,148,63,.45);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;}
+#cur2.big{width:46px;height:46px;border-color:var(--gold);}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px;animation:grain .5s steps(2) infinite;}
+@keyframes grain{0%{background-position:0 0}100%{background-position:128px 64px}}
+
+/* PARTICLES */
+#ptc{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* SCREENS */
+.screen{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;}
+.screen.on{display:flex;}
+
+/* NAV DOTS */
+#nav-dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;gap:10px;}
+.nd{width:6px;height:6px;border-radius:50%;background:rgba(184,148,63,.28);cursor:none;transition:all .3s;}
+.nd.on{background:var(--gold);box-shadow:0 0 8px var(--gold);}
+
+/* SHARED */
+.zh{font-family:'Noto Serif SC',serif;}
+.en{font-family:'Cinzel',serif;}
+.fell{font-family:'IM Fell English',serif;font-style:italic;}
+.eyebrow{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;}
+.btn{font-family:'Noto Serif SC',serif;font-size:13px;letter-spacing:.15em;padding:13px 32px;border:1px solid rgba(184,148,63,.45);background:transparent;color:var(--stone);cursor:none;transition:border-color .25s,color .25s;display:inline-block;}
+.btn:hover{border-color:var(--gold);color:var(--gold);}
+.btn-fill{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+.btn-fill:hover{background:var(--goldL);border-color:var(--goldL);color:var(--ink);}
+.gold-sep{display:flex;align-items:center;gap:12px;margin:18px 0;justify-content:center;}
+.gold-sep::before,.gold-sep::after{content:'';flex:1;max-width:50px;height:1px;background:linear-gradient(to right,transparent,var(--goldD));}
+.gold-sep::after{background:linear-gradient(to left,transparent,var(--goldD));}
+.gem{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;animation:gP 2.5s ease-in-out infinite;}
+@keyframes gP{0%,100%{box-shadow:0 0 5px var(--gold)}50%{box-shadow:0 0 16px var(--gold)}}
+
+/* RUIN SVG */
+.ruin-bg{position:absolute;bottom:0;left:0;right:0;height:200px;pointer-events:none;opacity:.12;}
+
+/* ════════ S0: Intro ════════ */
+#s0{background:radial-gradient(ellipse 80% 55% at 50% 25%,rgba(184,148,63,.07),transparent 60%),linear-gradient(180deg,#0a0805,#12100a 50%,#080603);flex-direction:column;overflow:hidden;}
+.intro-stage{position:relative;width:100%;max-width:820px;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px;text-align:center;z-index:2;}
+.islide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px;opacity:0;pointer-events:none;transition:opacity .5s ease;}
+.islide.on{opacity:1;pointer-events:all;}
+.i-line{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(28px,4.5vw,64px);line-height:1.4;color:var(--stone3);letter-spacing:.04em;text-align:center;}
+.i-line em{font-style:normal;color:var(--goldL);}
+.i-line .dim{color:var(--stone2);font-size:.7em;}
+.i-small{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(14px,1.8vw,20px);color:var(--stone2);letter-spacing:.12em;text-align:center;line-height:2;}
+.i-en{font-family:'Cinzel',serif;font-weight:300;font-size:clamp(11px,1.4vw,16px);letter-spacing:.35em;color:var(--goldD);text-transform:uppercase;margin-top:8px;}
+.i-nav-simple{display:flex;gap:14px;justify-content:center;margin-top:40px;}
+.i-big{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(32px,5.5vw,72px);line-height:1.15;color:var(--stone3);margin-bottom:6px;}
+.i-sub{font-family:'Cinzel',serif;font-weight:300;font-size:clamp(13px,1.6vw,18px);letter-spacing:.25em;color:var(--goldL);margin-bottom:20px;}
+.i-body{font-family:'Noto Serif SC',serif;font-size:clamp(14px,1.6vw,17px);line-height:2.1;color:var(--stone2);max-width:580px;font-weight:300;}
+.i-quote{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(15px,1.8vw,19px);line-height:2;color:var(--stone);border-left:2px solid var(--goldD);padding-left:22px;text-align:left;max-width:540px;}
+.i-nav{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px;}
+.flow-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin:20px 0;}
+.flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.flow-icon{width:44px;height:44px;border:1px solid rgba(184,148,63,.35);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.flow-label{font-size:11px;color:var(--stone2);letter-spacing:.08em;white-space:nowrap;}
+.flow-arrow{font-size:16px;color:var(--goldD);margin:0 6px;padding-bottom:16px;}
+.slide-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;}
+.sdot{width:22px;height:1px;background:rgba(184,148,63,.22);cursor:none;transition:all .3s;}
+.sdot.on{background:var(--gold);width:34px;}
+
+/* ════════ S1: Map ════════ */
+#s1{background:#060402;overflow:hidden;}
+#map-cv{position:absolute;inset:0;width:100%;height:100%;}
+.map-top{position:absolute;top:32px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;}
+.map-top p{font-family:'Noto Serif SC',serif;font-size:clamp(11px,1.5vw,14px);color:var(--stone2);margin-top:6px;letter-spacing:.15em;}
+.map-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Noto Serif SC',serif;font-size:13px;color:var(--stone2);letter-spacing:.1em;animation:pulse 2.5s ease-in-out infinite;pointer-events:none;}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+#tip{position:absolute;background:rgba(7,5,2,.92);border:1px solid rgba(184,148,63,.32);padding:10px 16px;backdrop-filter:blur(10px);pointer-events:none;opacity:0;transition:opacity .2s;z-index:20;}
+
+#tip h3{font-family:'Noto Serif SC',serif;font-size:13px;color:var(--gold);letter-spacing:.1em;margin-bottom:3px;}
+#tip p{font-size:11px;color:var(--stone2);}
+
+/* ════════ S2: Detail Pages ════════ */
+#s2{background:#070502;align-items:stretch;}
+.dp{position:absolute;inset:0;display:none;overflow:hidden;}
+.dp.on{display:flex;}
+.dp-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:52px 44px 52px 72px;border-right:1px solid rgba(184,148,63,.1);overflow-y:auto;}
+.dp-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:52px 72px 52px 44px;overflow-y:auto;}
+.dp-arch{width:100%;display:flex;}
+.arch-portrait{width:40%;height:100vh;position:relative;overflow:hidden;flex-shrink:0;border-right:1px solid rgba(184,148,63,.1);}
+.arch-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0f0b06,#1e1408 55%,#0a0805);}
+.arch-fig{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.arch-info{position:absolute;bottom:0;left:0;right:0;padding:26px;background:linear-gradient(to top,rgba(7,5,2,.95) 55%,transparent);}
+.arch-text{flex:1;display:flex;flex-direction:column;justify-content:center;padding:52px 64px;overflow-y:auto;}
+.stat-row{display:flex;gap:28px;margin-top:22px;flex-wrap:wrap;}
+.stat-n{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);}
+.stat-l{font-size:11px;letter-spacing:.15em;color:var(--stone2);text-transform:uppercase;margin-top:2px;}
+.info-box{border:1px solid rgba(184,148,63,.15);padding:24px;position:relative;margin-top:24px;}
+.info-tag{position:absolute;top:-9px;left:16px;background:#070502;padding:0 8px;font-size:10px;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;}
+.dp-tl{width:100%;padding:48px 72px;overflow-y:auto;}
+.tl-wrap{position:relative;margin-top:32px;}
+.tl-spine{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--goldD) 8%,var(--goldD) 92%,transparent);transform:translateX(-50%);}
+.tl-row{display:grid;grid-template-columns:1fr 44px 1fr;margin-bottom:32px;align-items:start;}
+.tl-l{text-align:right;padding-right:22px;}
+.tl-r{padding-left:22px;}
+.tl-dot{width:10px;height:10px;background:var(--gold);transform:rotate(45deg);margin:4px auto;box-shadow:0 0 10px rgba(184,148,63,.55);}
+.tl-yr{font-family:'IM Fell English',serif;font-size:10px;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:3px;}
+.tl-title{font-family:'Noto Serif SC',serif;font-size:14px;color:var(--stone3);margin-bottom:4px;}
+.tl-body{font-size:13px;line-height:1.9;color:var(--stone2);}
+/* 3d model */
+.dp-model{width:100%;height:100%;position:relative;}
+#mdl-mount{position:absolute;inset:0;}
+.mdl-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 72% 52% at 50% 50%,transparent 28%,rgba(7,5,2,.52) 100%);}
+.mdl-lbl{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:'Noto Serif SC',serif;font-size:12px;letter-spacing:.18em;color:var(--gold);padding:5px 14px;border:1px solid rgba(184,148,63,.22);background:rgba(7,5,2,.7);backdrop-filter:blur(8px);white-space:nowrap;}
+.mdl-ctrl{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);display:flex;gap:8px;}
+.mbtn{font-family:'Noto Serif SC',serif;font-size:11px;letter-spacing:.12em;padding:7px 14px;border:1px solid rgba(184,148,63,.28);background:rgba(7,5,2,.8);color:var(--stone2);cursor:none;transition:all .25s;backdrop-filter:blur(6px);}
+.mbtn:hover,.mbtn.on{border-color:var(--gold);color:var(--gold);}
+#mdl-ldr{position:absolute;inset:0;background:#070502;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:10;}
+#mdl-ldr.gone{display:none;}
+.ldr-ring{width:44px;height:44px;border:1px solid rgba(184,148,63,.28);transform:rotate(45deg);position:relative;animation:ldrSpin 3s linear infinite;}
+.ldr-ring::before{content:'';position:absolute;inset:7px;border:1px solid rgba(184,148,63,.14);animation:ldrSpin 2s linear infinite reverse;}
+@keyframes ldrSpin{from{transform:rotate(45deg)}to{transform:rotate(405deg)}}
+.ldr-bar-w{width:160px;height:1px;background:rgba(184,148,63,.12);}
+.ldr-bar{height:100%;background:var(--gold);width:0%;transition:width .4s;}
+.ldr-txt{font-family:'Noto Serif SC',serif;font-size:12px;color:var(--stone2);letter-spacing:.15em;}
+/* detail nav */
+.dp-arrows{position:absolute;top:50%;right:18px;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50;}
+.dpa{width:38px;height:38px;border:1px solid rgba(184,148,63,.22);background:rgba(7,5,2,.7);color:var(--stone2);font-size:16px;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .25s;backdrop-filter:blur(5px);}
+.dpa:hover{border-color:var(--gold);color:var(--gold);}
+.dpa.hide{opacity:0;pointer-events:none;}
+.dp-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:50;}
+.dpdot{width:18px;height:1px;background:rgba(184,148,63,.22);cursor:none;transition:all .3s;}
+.dpdot.on{background:var(--gold);width:28px;}
+
+/* ════════ S3: Chat ════════ */
+#s3{background:#070502;align-items:stretch;}
+.chat-portrait{width:36%;height:100%;position:relative;overflow:hidden;flex-shrink:0;border-right:1px solid rgba(184,148,63,.1);}
+.cp-bg{position:absolute;inset:0;background:linear-gradient(180deg,#0f0b06,#1e1408 60%,#0a0805);}
+.cp-fig{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.cp-info{position:absolute;bottom:0;left:0;right:0;padding:26px;background:linear-gradient(to top,rgba(7,5,2,.95) 55%,transparent);}
+.cp-name{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:400;color:var(--stone3);letter-spacing:.1em;margin-bottom:3px;}
+.cp-role{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--gold);}
+.cp-era{font-size:11px;color:var(--stone2);margin-top:3px;}
+.chat-right{flex:1;display:flex;flex-direction:column;height:100%;}
+.chat-hdr{padding:18px 26px;border-bottom:1px solid rgba(184,148,63,.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.chat-hdr-t{font-family:'Noto Serif SC',serif;font-size:13px;letter-spacing:.15em;color:var(--stone2);}
+.revival-hint{font-size:11px;color:var(--stone2);opacity:.55;letter-spacing:.06em;}
+.revival-hint b{color:var(--gold);font-weight:600;}
+.chat-msgs{flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth;}
+.chat-msgs::-webkit-scrollbar{width:2px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(184,148,63,.28);}
+.msg{max-width:75%;animation:msgIn .35s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg-u{align-self:flex-end;}
+.msg-a{align-self:flex-start;}
+.bubble{padding:12px 16px;font-size:14px;line-height:1.85;font-weight:300;}
+.msg-u .bubble{background:rgba(184,148,63,.1);border:1px solid rgba(184,148,63,.18);color:var(--stone3);}
+.msg-a .bubble{background:rgba(255,255,255,.022);border:1px solid rgba(184,148,63,.09);color:var(--stone);}
+.msg-meta{font-size:10px;color:var(--stone2);letter-spacing:.08em;margin-top:3px;opacity:.5;}
+.msg-u .msg-meta{text-align:right;}
+.typing{display:flex;gap:4px;padding:12px 16px;border:1px solid rgba(184,148,63,.09);align-self:flex-start;}
+.typing span{width:5px;height:5px;border-radius:50%;background:var(--stone2);animation:tdot 1.2s ease-in-out infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
+/* Passphrase hint */
+.revival-prompt{padding:12px 20px;background:rgba(184,148,63,.06);border:1px solid rgba(184,148,63,.2);text-align:center;margin:8px 26px;font-size:12px;color:var(--stone2);letter-spacing:.06em;display:none;flex-shrink:0;}
+.revival-prompt b{color:var(--gold);}
+.chat-inp-wrap{padding:16px 26px;border-top:1px solid rgba(184,148,63,.1);flex-shrink:0;}
+.chat-inp-row{display:flex;gap:8px;align-items:flex-end;}
+#cinp{flex:1;background:rgba(255,255,255,.022);border:none;border-bottom:1px solid rgba(184,148,63,.22);padding:10px 4px;color:var(--stone3);font-family:'Noto Serif SC',serif;font-size:15px;outline:none;resize:none;max-height:90px;min-height:40px;transition:border-color .3s;line-height:1.6;}
+#cinp:focus{border-bottom-color:var(--gold);}
+#cinp::placeholder{color:rgba(138,117,96,.36);font-style:italic;}
+#csend{width:40px;height:40px;border:1px solid rgba(184,148,63,.32);background:transparent;color:var(--stone2);cursor:none;font-size:15px;transition:all .25s;flex-shrink:0;}
+#csend:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ════════ S4: Letters ════════ */
+#s4{background:linear-gradient(180deg,#020201 0%,#060402 60%,#080603 100%);flex-direction:column;overflow:hidden;}
+
+/* star canvas */
+#lcv{position:absolute;inset:0;z-index:1;}
+
+/* ── Phase 1: spotlight reading ── */
+#sky-bg{position:absolute;inset:0;z-index:2;pointer-events:none;}
+.sky-float{
+  position:absolute;pointer-events:none;
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  animation:skyDrift linear infinite;
+}
+@keyframes skyDrift{
+  0%  {transform:translate(0px,0px);}
+  33% {transform:translate(var(--dx1),var(--dy1));}
+  66% {transform:translate(var(--dx2),var(--dy2));}
+  100%{transform:translate(0px,0px);}
+}
+.sky-float-name{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:9px;letter-spacing:.3em;color:var(--goldD);
+  display:block;margin-bottom:4px;
+}
+.sky-float-text{color:var(--stone2);display:block;font-size:12px;max-width:260px;}
+
+/* dim overlay */
+#sky-dim{
+  position:absolute;inset:0;z-index:3;
+  background:rgba(2,2,1,.82);pointer-events:none;
+  opacity:0;transition:opacity .7s ease;
+}
+#sky-dim.on{opacity:1;}
+
+/* the one big spotlit letter */
+#spotlight{
+  position:absolute;inset:0;z-index:4;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none;
+  opacity:0;transition:opacity .6s ease;
+}
+#spotlight.on{opacity:1;}
+#spotlight .sp-name{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:11px;letter-spacing:.45em;color:var(--goldL);
+  text-transform:uppercase;margin-bottom:22px;text-align:center;
+}
+#spotlight .sp-text{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:clamp(24px,4vw,48px);line-height:2;
+  color:var(--stone3);text-align:center;
+  max-width:min(660px,82vw);letter-spacing:.04em;
+}
+/* progress */
+#sky-dots{
+  position:absolute;top:28px;left:50%;transform:translateX(-50%);
+  display:flex;gap:7px;z-index:5;pointer-events:none;
+}
+.sky-dot{width:16px;height:1px;background:rgba(184,148,63,.16);transition:all .4s;}
+.sky-dot.on{background:var(--gold);width:26px;}
+/* hint */
+#sky-hint{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:12px;color:var(--stone2);opacity:.45;
+  letter-spacing:.18em;z-index:5;pointer-events:none;
+  animation:pulse 2.5s ease-in-out infinite;white-space:nowrap;
+}
+/* CTA */
+#sky-cta{
+  position:absolute;inset:0;z-index:6;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(2,2,1,.85);backdrop-filter:blur(4px);
+}
+#sky-cta.show{display:flex;}
+.cta-line{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:clamp(15px,2vw,21px);color:var(--stone2);
+  line-height:2.3;text-align:center;max-width:480px;
+  margin-bottom:42px;letter-spacing:.06em;
+}
+.cta-line em{font-style:normal;color:var(--stone3);}
+
+/* ── Phase 2: write ── */
+#sky-write{
+  position:absolute;inset:0;z-index:7;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+}
+#sky-write.show{display:flex;}
+.write-speaker{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:10px;letter-spacing:.4em;color:var(--goldD);
+  text-transform:uppercase;margin-bottom:12px;text-align:center;
+}
+.write-prompt{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:clamp(14px,1.8vw,19px);color:var(--stone2);
+  line-height:2.1;text-align:center;max-width:460px;
+  margin-bottom:44px;letter-spacing:.05em;
+}
+.write-form{width:min(500px,86vw);}
+.write-name-row{display:flex;align-items:center;gap:12px;margin-bottom:26px;}
+.write-name-label{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:13px;color:var(--stone2);white-space:nowrap;opacity:.55;
+}
+#wname{
+  flex:1;background:transparent;border:none;
+  border-bottom:1px solid rgba(184,148,63,.2);
+  padding:6px 0;color:var(--stone3);
+  font-family:'Noto Serif SC',serif;font-size:15px;
+  outline:none;letter-spacing:.06em;transition:border-color .3s;
+}
+#wname:focus{border-bottom-color:var(--gold);}
+#wname::placeholder{color:rgba(138,117,96,.26);font-style:italic;font-size:13px;}
+#wmsg{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid rgba(184,148,63,.2);
+  padding:10px 0;color:var(--stone3);
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(17px,2.2vw,24px);font-weight:300;
+  outline:none;resize:none;min-height:72px;max-height:130px;
+  line-height:1.9;letter-spacing:.04em;transition:border-color .3s;
+}
+#wmsg:focus{border-bottom-color:var(--gold);}
+#wmsg::placeholder{color:rgba(138,117,96,.2);font-style:italic;font-size:15px;}
+.write-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px;}
+.write-count{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:11px;color:var(--stone2);opacity:.35;letter-spacing:.1em;
+}
+#wsub{
+  font-family:'Noto Serif SC',serif;font-size:12px;
+  letter-spacing:.22em;padding:12px 38px;
+  border:1px solid rgba(184,148,63,.45);
+  background:transparent;color:var(--stone);
+  cursor:none;transition:all .3s;
+}
+#wsub:hover{border-color:var(--gold);color:var(--goldL);background:rgba(184,148,63,.05);}
+#wsub:disabled{opacity:.35;}
+.write-skip{
+  display:block;text-align:center;margin-top:20px;
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:11px;color:var(--stone2);opacity:.28;
+  cursor:none;transition:opacity .25s;letter-spacing:.08em;
+  border:none;background:transparent;
+}
+.write-skip:hover{opacity:.6;}
+
+/* ════════ S5: Memory Book ════════ */
+#s5{background:linear-gradient(160deg,#2a1e10,#1a1208 50%,#221608);overflow:hidden;}
+.book-outer{width:min(860px,94vw);height:min(600px,88vh);position:relative;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
+/* Parchment paper book */
+.book-body{
+  position:absolute;inset:0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E"),
+    linear-gradient(168deg, #f5ead8 0%, #ede0c4 30%, #e8d8b8 60%, #f0e5cc 100%);
+  box-shadow:
+    inset 0 0 80px rgba(139,90,43,.08),
+    inset 0 0 20px rgba(139,90,43,.06),
+    8px 0 40px rgba(0,0,0,.35),
+    0 20px 60px rgba(0,0,0,.4);
+  border-radius:0 3px 3px 0;
+}
+/* Spine — leather-look dark left edge */
+.book-spine{
+  position:absolute;left:0;top:0;bottom:0;width:36px;
+  background:linear-gradient(to right,#3d2410 0%,#5c3820 40%,#7a4e2c 70%,#6b4424 100%);
+  border-radius:0;
+  box-shadow:inset -3px 0 8px rgba(0,0,0,.3);
+}
+.book-spine::after{
+  content:'';position:absolute;top:12%;bottom:12%;left:8px;right:8px;
+  border-top:1px solid rgba(184,148,63,.3);border-bottom:1px solid rgba(184,148,63,.3);
+}
+/* Ruled lines on page */
+.book-body::before{
+  content:'';position:absolute;
+  left:44px;right:0;top:0;bottom:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,transparent 27px,
+    rgba(139,90,43,.07) 27px,rgba(139,90,43,.07) 28px
+  );
+  pointer-events:none;
+}
+/* Page edge curl effect */
+.book-body::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:40px;height:40px;
+  background:linear-gradient(135deg,transparent 50%,rgba(0,0,0,.08) 50%);
+  pointer-events:none;
+}
+.bc{display:none;}/* remove corners, paper doesn't need them */
+.book-inner{position:absolute;left:52px;right:28px;top:28px;bottom:70px;display:flex;flex-direction:column;}
+.book-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid rgba(139,90,43,.18);}
+.book-title{font-family:'Noto Serif SC',serif;font-weight:400;font-size:16px;letter-spacing:.18em;color:#5c3820;}
+.book-pgn{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:#8b6240;opacity:.7;letter-spacing:.12em;}
+.book-entries{flex:1;overflow-y:auto;padding-right:4px;padding-bottom:56px;}
+.book-entries::-webkit-scrollbar{width:3px;}
+.book-entries::-webkit-scrollbar-thumb{background:rgba(139,90,43,.2);}
+/* conversation bubbles inside book */
+.book-msg-u{text-align:right;margin-bottom:10px;}
+.book-msg-a{text-align:left;margin-bottom:10px;}
+.book-bubble{display:inline-block;max-width:82%;padding:7px 12px;font-size:12px;line-height:1.8;border-radius:0;}
+.book-msg-u .book-bubble{background:rgba(139,90,43,.1);border:1px solid rgba(139,90,43,.2);color:#3d2410;}
+.book-msg-a .book-bubble{background:rgba(255,255,255,.5);border:1px solid rgba(139,90,43,.12);color:#4a3020;font-style:italic;}
+.book-msg-label{font-size:10px;color:#8b6240;opacity:.6;letter-spacing:.1em;margin-bottom:3px;}
+.book-eval-box{margin-top:14px;padding:12px 16px;border-left:2px solid rgba(184,148,63,.5);background:rgba(184,148,63,.06);}
+.book-eval-label{font-size:10px;letter-spacing:.25em;color:#7a6028;text-transform:uppercase;margin-bottom:5px;font-family:'IM Fell English',serif;font-style:italic;}
+.book-eval-text{font-size:13px;line-height:1.75;color:#5c3820;font-style:italic;}
+.book-nav{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:16px;align-items:center;}
+.bnav-btn{width:34px;height:34px;border:1px solid rgba(139,90,43,.25);background:rgba(245,234,216,.7);color:#5c3820;cursor:none;font-size:15px;transition:all .25s;display:flex;align-items:center;justify-content:center;}
+.bnav-btn:hover{border-color:#7a6028;background:rgba(245,234,216,.95);}
+.bnav-pgr{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:#7a6028;letter-spacing:.1em;}
+
+/* TOAST */
+/* ── Name overlay ── */
+#name-overlay{
+  position:fixed;inset:0;z-index:8000;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(8,6,3,.75);backdrop-filter:blur(12px);
+}
+#name-overlay.show{display:flex;}
+.name-card{
+  width:min(480px,90vw);
+  background:linear-gradient(158deg,#1e1a10,#141008 60%,#1a160c);
+  border:1px solid rgba(184,148,63,.28);
+  padding:48px 52px;
+  position:relative;
+  box-shadow:0 40px 80px rgba(0,0,0,.6);
+}
+.name-card::before{
+  content:'';position:absolute;top:16px;left:16px;right:16px;bottom:16px;
+  border:1px solid rgba(184,148,63,.08);pointer-events:none;
+}
+.name-card-gem{
+  width:6px;height:6px;background:var(--gold);transform:rotate(45deg);
+  margin:0 auto 20px;box-shadow:0 0 16px var(--gold);
+  animation:gP 2.5s ease-in-out infinite;
+}
+.name-card-title{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:clamp(18px,2.5vw,26px);color:var(--stone3);
+  text-align:center;letter-spacing:.15em;margin-bottom:8px;
+}
+.name-card-sub{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:13px;color:var(--stone2);text-align:center;
+  letter-spacing:.08em;margin-bottom:36px;opacity:.7;
+}
+.name-card-input{
+  width:100%;background:transparent;
+  border:none;border-bottom:1px solid rgba(184,148,63,.35);
+  padding:12px 0;
+  font-family:'Noto Serif SC',serif;font-size:18px;
+  color:var(--stone3);outline:none;text-align:center;
+  letter-spacing:.12em;transition:border-color .3s;
+}
+.name-card-input:focus{border-bottom-color:var(--gold);}
+.name-card-input::placeholder{color:rgba(138,117,96,.35);font-style:italic;font-size:15px;}
+.name-card-btn{
+  display:block;width:100%;margin-top:28px;
+  padding:14px;
+  background:var(--gold);border:none;
+  font-family:'Noto Serif SC',serif;font-size:14px;
+  letter-spacing:.2em;color:var(--ink);cursor:none;
+  transition:background .25s;
+}
+.name-card-btn:hover{background:var(--goldL);}
+.name-card-note{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:11px;color:var(--stone2);text-align:center;
+  margin-top:14px;opacity:.5;letter-spacing:.06em;
+}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(11,8,4,.96);border:1px solid rgba(184,148,63,.32);padding:10px 22px;font-family:'Noto Serif SC',serif;font-size:13px;color:var(--stone3);opacity:0;pointer-events:none;transition:all .35s;z-index:9000;backdrop-filter:blur(12px);letter-spacing:.06em;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{border-color:rgba(200,75,45,.5);color:#e8a088;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes sigSpin{from{transform:rotate(45deg)}to{transform:rotate(405deg)}}
+
+@media(max-width:768px){
+  .dp-left,.dp-right{padding:32px 20px;}
+  .arch-portrait{display:none;}
+  .arch-text{padding:32px 20px;}
+  .chat-portrait{display:none;}
+  .dp-tl{padding:36px 20px;}
+  .book-inner{left:26px;right:12px;}
+  .bentry{grid-template-columns:1fr;}
+  .be-left{text-align:left;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="grain"></div>
+<canvas id="ptc"></canvas>
+
+<!-- NAV DOTS -->
+<div id="nav-dots">
+  <div class="nd on"  onclick="GO(0)" title="Intro"></div>
+  <div class="nd"     onclick="GO(1)" title="World Map"></div>
+  <div class="nd"     onclick="GO(2)" title="Details"></div>
+  <div class="nd"     onclick="GO(3)" title="Architect"></div>
+  <div class="nd"     onclick="GO(4)" title="Letters"></div>
+  <div class="nd"     onclick="GO(5)" title="Memory Book"></div>
+</div>
+
+<!-- ══════════ S0: 引导介绍 ══════════ -->
+<div id="s0" class="screen on">
+  <svg class="ruin-bg" viewBox="0 0 1400 200" fill="none" preserveAspectRatio="xMidYMax slice">
+    <g fill="#c8b89a">
+      <rect x="60" y="90" width="14" height="110"/><rect x="54" y="83" width="26" height="8"/>
+      <rect x="145" y="55" width="14" height="145"/><rect x="139" y="48" width="26" height="8"/>
+      <rect x="230" y="72" width="14" height="128"/><rect x="224" y="65" width="26" height="8"/>
+      <rect x="315" y="42" width="14" height="158"/><rect x="309" y="35" width="26" height="8"/>
+      <rect x="400" y="65" width="14" height="135"/><rect x="394" y="58" width="26" height="8"/>
+      <rect x="54" y="190" width="368" height="10"/>
+      <rect x="900" y="60" width="14" height="140"/><rect x="894" y="53" width="26" height="8"/>
+      <rect x="985" y="40" width="14" height="160"/><rect x="979" y="33" width="26" height="8"/>
+      <rect x="1070" y="75" width="14" height="125"/><rect x="1064" y="68" width="26" height="8"/>
+      <rect x="1155" y="50" width="14" height="150"/><rect x="1149" y="43" width="26" height="8"/>
+      <rect x="1240" y="65" width="14" height="135"/><rect x="1234" y="58" width="26" height="8"/>
+      <rect x="894" y="190" width="368" height="10"/>
+      <rect x="0" y="192" width="1400" height="8" opacity=".3"/>
+    </g>
+  </svg>
+
+  <div class="intro-stage">
+
+    <!-- slide 0: title -->
+    <div class="islide on" id="is0">
+      <p class="i-en" style="margin-bottom:28px">Team Revival · Education Track · 2025</p>
+      <h1 class="i-line" style="font-size:clamp(42px,7vw,96px);color:var(--stone3)">Letters to the Unfinished</h1>
+      <p class="i-en" style="margin-top:16px;letter-spacing:.5em;font-size:clamp(11px,1.2vw,14px)">Telesterion · Eleusinian Mysteries</p>
+      <div class="i-nav-simple" style="margin-top:52px">
+        <button class="btn" onclick="SI(1)" style="font-size:12px;padding:12px 36px;letter-spacing:.3em">↓</button>
+      </div>
+    </div>
+
+    <!-- slide 1 -->
+    <div class="islide" id="is1">
+      <p class="i-line">Countless structures rose</p>
+      <p class="i-line" style="color:var(--stone2);margin-bottom:28px">and claimed the earth.</p>
+      <p class="i-line">Yet countless more were dreamed —</p>
+      <p class="i-line" style="color:var(--stone2)">and swallowed by time.</p>
+      <div class="i-nav-simple"><button class="btn" onclick="SI(2)" style="font-size:12px;padding:12px 36px">↓</button></div>
+    </div>
+
+    <!-- slide 2 -->
+    <div class="islide" id="is2">
+      <p class="i-line" style="font-size:clamp(18px,2.8vw,36px);color:var(--stone2);max-width:600px;line-height:1.9">Never built,<br>yet carrying the rise and fall of civilisations<br>and the intent of their designers.</p>
+      <div class="i-nav-simple"><button class="btn" onclick="SI(3)" style="font-size:12px;padding:12px 36px">↓</button></div>
+    </div>
+
+    <!-- slide 3 -->
+    <div class="islide" id="is3">
+      <p class="i-line" style="font-size:clamp(16px,2.2vw,28px);color:var(--stone2);max-width:560px;line-height:2">Every civilisation has its value.<br>Every unfinished design deserves to be seen.</p>
+      <p class="i-small" style="color:var(--stone2);margin-top:24px">To converse with the architect's spirit is cultural revival.<br>To leave a letter across time is enlightenment.</p>
+      <div class="i-nav-simple"><button class="btn" onclick="SI(4)" style="font-size:12px;padding:12px 36px">↓</button></div>
+    </div>
+
+    <!-- slide 4: enter -->
+    <div class="islide" id="is4">
+      <p class="i-en" style="margin-bottom:20px;letter-spacing:.3em">Are you ready?</p>
+      <h2 class="i-line" style="font-size:clamp(28px,4.5vw,60px)">Begin the Journey</h2>
+      <div class="i-nav-simple" style="margin-top:44px">
+        <button class="btn btn-fill" onclick="GO(1)" style="font-size:13px;padding:14px 48px;letter-spacing:.2em">Enter →</button>
+      </div>
+    </div>
+
+    <div class="slide-dots" id="sdots"></div>
+  </div>
+</div>
+
+<!-- ══════════ S1: 主地图 ══════════ -->
+<div id="s1" class="screen">
+  <canvas id="map-cv"></canvas>
+  <div class="map-top">
+    <span class="eyebrow">Unfinished Works · World Map</span>
+    <p>Each glowing point — a civilisation waiting to be remembered.</p>
+  </div>
+  <p class="map-hint">Click the golden light to begin.</p>
+  <div id="tip"><h3 id="tip-n"></h3><p id="tip-d"></p></div>
+</div>
+
+<!-- ══════════ S2: 项目详情 ══════════ -->
+<div id="s2" class="screen">
+  <!-- dp0: Overview -->
+  <div class="dp on" id="dp0">
+    <div class="dp-left">
+      <span class="eyebrow" style="margin-bottom:12px">Ancient Greece · Eleusis · 760 BCE – 396 CE</span>
+      <h2 style="font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(24px,3.8vw,48px);line-height:1.1;color:var(--stone3);margin-bottom:16px">Telesterion<br><span style="font-size:.62em;color:var(--goldL);font-family:'IM Fell English',serif;font-style:italic">Hall of Initiation · Eleusinian Mysteries</span></h2>
+      <div class="gold-sep" style="justify-content:flex-start"><div class="gem"></div></div>
+      <p style="font-size:14px;line-height:2.1;color:var(--stone2);max-width:420px">The sanctuary at Eleusis (modern Alepochori), site of the Eleusinian Mysteries — the most sacred religious rites of ancient Greece. Designed and rebuilt across centuries, it was never truly completed.</p>
+      <div class="stat-row">
+        <div><div class="stat-n">1,156</div><div class="stat-l">years of history</div></div>
+        <div><div class="stat-n">42</div><div class="stat-l">interior columns</div></div>
+        <div><div class="stat-n">3,000</div><div class="stat-l">capacity (designed)</div></div>
+      </div>
+    </div>
+    <div class="dp-right">
+      <div class="info-box">
+        <div class="info-tag">Archaeological Context</div>
+        <p style="font-size:13px;line-height:2.1;color:var(--stone2);margin-bottom:12px">Eleusis lies 18 km from Athens. The sanctuary grew from a modest Mycenaean space into a hall designed for thousands — its architects changing, its ambitions expanding, yet forever caught between blueprint and foundation.</p>
+        <p style="font-size:13px;line-height:2.1;color:var(--stone2)">Iktinos — architect of the Parthenon — proposed a 54×52m hypostyle hall with 42 columns, holding thousands of initiates in near-darkness for all-night rites. Funding failed. Work stopped. What remains: foundations, scattered column drums, and silence.</p>
+      </div>
+      <p style="margin-top:18px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--stone2)">Style: Doric · Late Classical · Hypostyle</p>
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn" onclick="DP(1)" style="font-size:12px;padding:10px 20px">Meet the Architect →</button>
+        <button class="btn btn-fill" onclick="GO(3)" style="font-size:12px;padding:10px 20px">Speak with the Architect →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- dp1: Architect -->
+  <div class="dp" id="dp1">
+    <div class="dp-arch">
+      <div class="arch-portrait">
+        <div class="arch-bg"></div>
+        <div class="arch-fig">
+          <svg width="280" height="460" viewBox="0 0 680 820" fill="none" style="filter:drop-shadow(0 0 36px rgba(184,148,63,.13))">
+<defs>
+  <clipPath id="faceClip"><ellipse cx="340" cy="210" rx="108" ry="130"/></clipPath>
+  <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c9a882"/>
+    <stop offset="100%" stop-color="#a07850"/>
+  </linearGradient>
+  <linearGradient id="robeGrad" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0%" stop-color="#e8e0d0"/>
+    <stop offset="100%" stop-color="#c8bfa8"/>
+  </linearGradient>
+  <linearGradient id="shadowGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
+    <stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
+  </linearGradient>
+  <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#8a6820"/>
+    <stop offset="40%" stop-color="#d4a84b"/>
+    <stop offset="70%" stop-color="#f0c96a"/>
+    <stop offset="100%" stop-color="#b8943f"/>
+  </linearGradient>
+  <linearGradient id="scrollGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#d4b87a"/>
+    <stop offset="100%" stop-color="#c4a460"/>
+  </linearGradient>
+  <radialGradient id="glowGrad2" cx="50%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#b8943f" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#b8943f" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<ellipse cx="340" cy="300" rx="320" ry="350" fill="url(#glowGrad2)"/>
+<rect x="110" y="100" width="18" height="680" rx="4" fill="#c8b89a" opacity="0.04"/>
+<rect x="552" y="100" width="18" height="680" rx="4" fill="#c8b89a" opacity="0.04"/>
+<rect x="308" y="320" width="64" height="80" rx="8" fill="url(#skinGrad)"/>
+<rect x="308" y="320" width="64" height="80" rx="8" fill="url(#shadowGrad)" opacity="0.4"/>
+<path d="M160 820 L160 500 Q180 430 220 410 Q270 390 340 385 Q410 390 460 410 Q500 430 520 500 L520 820 Z" fill="url(#robeGrad)"/>
+<path d="M160 820 L160 500 Q175 445 200 420 L220 430 Q195 455 195 520 L195 820 Z" fill="rgba(0,0,0,0.13)"/>
+<path d="M520 820 L520 500 Q505 445 480 420 L460 430 Q485 455 485 520 L485 820 Z" fill="rgba(0,0,0,0.13)"/>
+<path d="M240 820 Q242 650 246 560 Q250 500 258 460" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="2"/>
+<path d="M280 820 Q281 700 284 600 Q287 530 292 480" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1.5"/>
+<path d="M340 820 Q340 720 340 620 Q340 550 342 490" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1.5"/>
+<path d="M400 820 Q399 700 396 600 Q393 530 388 480" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1.5"/>
+<path d="M440 820 Q438 650 434 560 Q430 500 422 460" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="2"/>
+<path d="M310 820 Q312 700 315 580 Q318 500 325 440" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="3"/>
+<circle cx="430" cy="430" r="9" fill="#b8943f" stroke="#d4b060" stroke-width="1.5"/>
+<circle cx="430" cy="430" r="4" fill="#f0c96a"/>
+<path d="M460 430 Q510 460 530 520 Q545 570 540 620" fill="none" stroke="url(#skinGrad)" stroke-width="42" stroke-linecap="round"/>
+<path d="M460 430 Q510 460 530 520 Q545 570 540 620" fill="none" stroke="#a07850" stroke-width="42" stroke-linecap="round" opacity="0.3"/>
+<ellipse cx="535" cy="625" rx="24" ry="20" fill="url(#skinGrad)"/>
+<rect x="520" y="600" width="70" height="44" rx="6" fill="url(#scrollGrad)" transform="rotate(-15,555,622)"/>
+<line x1="524" y1="612" x2="580" y2="601" stroke="rgba(100,70,20,0.35)" stroke-width="1.2"/>
+<line x1="522" y1="622" x2="578" y2="611" stroke="rgba(100,70,20,0.35)" stroke-width="1"/>
+<line x1="520" y1="632" x2="576" y2="621" stroke="rgba(100,70,20,0.28)" stroke-width="0.8"/>
+<ellipse cx="523" cy="622" rx="5" ry="14" fill="#c4a460" stroke="#a8883e" stroke-width="0.5" transform="rotate(-15,523,622)"/>
+<ellipse cx="587" cy="608" rx="5" ry="14" fill="#c4a460" stroke="#a8883e" stroke-width="0.5" transform="rotate(-15,587,608)"/>
+<path d="M220 430 Q175 470 165 540 Q158 590 162 640" fill="none" stroke="url(#skinGrad)" stroke-width="38" stroke-linecap="round"/>
+<path d="M220 430 Q175 470 165 540 Q158 590 162 640" fill="none" stroke="#a07850" stroke-width="38" stroke-linecap="round" opacity="0.25"/>
+<ellipse cx="163" cy="645" rx="22" ry="18" fill="url(#skinGrad)"/>
+<ellipse cx="340" cy="210" rx="108" ry="130" fill="url(#skinGrad)"/>
+<path d="M250 250 Q260 310 290 330 Q320 345 340 345 Q360 345 390 330 Q420 310 430 250" fill="url(#skinGrad)"/>
+<path d="M262 260 Q270 305 295 322 Q318 336 340 336 Q362 336 365 324" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="3"/>
+<ellipse cx="283" cy="230" rx="28" ry="18" fill="rgba(0,0,0,0.08)" opacity="0.7"/>
+<ellipse cx="397" cy="230" rx="28" ry="18" fill="rgba(0,0,0,0.08)" opacity="0.7"/>
+<ellipse cx="278" cy="220" rx="14" ry="9" fill="rgba(255,255,255,0.09)"/>
+<ellipse cx="402" cy="220" rx="14" ry="9" fill="rgba(255,255,255,0.09)"/>
+<path d="M256 178 Q285 168 320 172 Q330 173 340 173 Q350 173 360 172 Q395 168 424 178" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="4" stroke-linecap="round"/>
+<path d="M258 176 Q285 167 320 171 Q340 171 360 171 Q395 167 422 176" fill="none" stroke="rgba(80,50,20,0.2)" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="300" cy="196" rx="26" ry="14" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="380" cy="196" rx="26" ry="14" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="300" cy="197" rx="20" ry="11" fill="#f0e8d8"/>
+<ellipse cx="380" cy="197" rx="20" ry="11" fill="#f0e8d8"/>
+<ellipse cx="300" cy="197" rx="11" ry="11" fill="#4a3820"/>
+<ellipse cx="300" cy="197" rx="7" ry="7" fill="#2a1e10"/>
+<ellipse cx="296" cy="193" rx="3" ry="3" fill="rgba(255,255,255,0.45)"/>
+<ellipse cx="380" cy="197" rx="11" ry="11" fill="#4a3820"/>
+<ellipse cx="380" cy="197" rx="7" ry="7" fill="#2a1e10"/>
+<ellipse cx="376" cy="193" rx="3" ry="3" fill="rgba(255,255,255,0.45)"/>
+<path d="M280 192 Q300 184 320 192 Q300 200 280 192" fill="rgba(0,0,0,0.12)"/>
+<path d="M360 192 Q380 184 400 192 Q380 200 360 192" fill="rgba(0,0,0,0.12)"/>
+<path d="M281 191 Q300 184 319 191" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+<path d="M361 191 Q380 184 399 191" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+<path d="M282 202 Q300 208 318 202" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+<path d="M362 202 Q380 208 398 202" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+<path d="M340 175 L335 230 Q332 242 330 248" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M340 178 L337 220" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M330 248 Q332 256 340 258 Q348 256 350 248" fill="rgba(0,0,0,0.12)"/>
+<ellipse cx="327" cy="252" rx="8" ry="5" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="353" cy="252" rx="8" ry="5" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="340" cy="253" rx="5" ry="3" fill="rgba(255,255,255,0.08)"/>
+<path d="M308 278 Q322 272 340 274 Q358 272 372 278 Q358 285 340 283 Q322 285 308 278" fill="#8a5a3a"/>
+<path d="M316 276 Q326 270 340 273 Q354 270 364 276" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+<path d="M308 278 Q324 294 340 295 Q356 294 372 278 Q358 285 340 283 Q322 285 308 278" fill="#7a4e32"/>
+<ellipse cx="340" cy="287" rx="15" ry="4" fill="rgba(255,255,255,0.07)"/>
+<ellipse cx="308" cy="279" rx="5" ry="3" fill="rgba(0,0,0,0.15)"/>
+<ellipse cx="372" cy="279" rx="5" ry="3" fill="rgba(0,0,0,0.15)"/>
+<path d="M334 262 L332 272 M346 262 L348 272" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1.2"/>
+<ellipse cx="234" cy="218" rx="16" ry="22" fill="#b8906a"/>
+<ellipse cx="234" cy="218" rx="10" ry="16" fill="#a07850"/>
+<ellipse cx="446" cy="218" rx="16" ry="22" fill="#b8906a"/>
+<ellipse cx="446" cy="218" rx="10" ry="16" fill="#a07850"/>
+<path d="M232 140 Q250 80 340 72 Q430 80 448 140 Q430 110 400 100 Q370 92 340 90 Q310 92 280 100 Q250 110 232 140" fill="#2a1e0e"/>
+<path d="M240 130 Q260 108 295 102 Q318 97 340 96" fill="none" stroke="#3a2e1a" stroke-width="3" stroke-linecap="round"/>
+<path d="M448 130 Q428 108 395 102 Q368 97 345 96" fill="none" stroke="#3a2e1a" stroke-width="3" stroke-linecap="round"/>
+<path d="M233 148 Q256 88 340 78 Q424 88 447 148 Q425 118 395 106 Q368 97 340 94 Q312 97 285 106 Q255 118 233 148" fill="rgba(0,0,0,0.3)"/>
+<g opacity="0.92">
+  <path d="M242 148 Q230 138 225 128" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="228" cy="138" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-30,228,138)"/>
+  <ellipse cx="218" cy="128" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-50,218,128)"/>
+  <path d="M255 138 Q245 124 242 112" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="246" cy="126" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-20,246,126)"/>
+  <ellipse cx="242" cy="113" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-40,242,113)"/>
+  <path d="M272 126 Q264 110 265 97" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="266" cy="114" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-10,266,114)"/>
+  <ellipse cx="265" cy="99" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-5,265,99)"/>
+  <path d="M293 114 Q289 98 293 85" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="291" cy="100" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(5,291,100)"/>
+  <ellipse cx="293" cy="86" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(10,293,86)"/>
+  <path d="M438 148 Q450 138 455 128" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="452" cy="138" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(30,452,138)"/>
+  <ellipse cx="462" cy="128" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(50,462,128)"/>
+  <path d="M425 138 Q435 124 438 112" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="434" cy="126" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(20,434,126)"/>
+  <ellipse cx="438" cy="113" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(40,438,113)"/>
+  <path d="M408 126 Q416 110 415 97" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="414" cy="114" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(10,414,114)"/>
+  <ellipse cx="415" cy="99" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(5,415,99)"/>
+  <path d="M387 114 Q391 98 387 85" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="389" cy="100" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-5,389,100)"/>
+  <ellipse cx="387" cy="86" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-10,387,86)"/>
+  <path d="M316 80 Q328 76 340 75 Q352 76 364 80" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="340" cy="77" rx="12" ry="7" fill="#c8a84f" stroke="#d4b060" stroke-width="0.8"/>
+  <ellipse cx="324" cy="80" rx="9" ry="5.5" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5"/>
+  <ellipse cx="356" cy="80" rx="9" ry="5.5" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5"/>
+</g>
+<path d="M295 310 Q300 340 316 355 Q328 363 340 364 Q352 363 364 355 Q380 340 385 310 Q372 325 355 332 Q347 335 340 335 Q333 335 325 332 Q308 325 295 310" fill="#2a1e0e"/>
+<path d="M308 318 Q312 342 320 354" fill="none" stroke="#1a1208" stroke-width="1.5" opacity="0.6"/>
+<path d="M325 325 Q328 348 333 358" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M340 328 Q340 350 340 362" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M355 325 Q352 348 347 358" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M372 318 Q368 342 360 354" fill="none" stroke="#1a1208" stroke-width="1.5" opacity="0.6"/>
+<path d="M308 278 Q320 282 340 280 Q360 282 372 278" fill="#2a1e0e"/>
+<path d="M310 276 Q325 282 340 280 Q355 282 370 276" fill="none" stroke="#1a1208" stroke-width="1.5" stroke-linecap="round"/>
+<ellipse cx="300" cy="160" rx="55" ry="45" fill="rgba(255,255,255,0.05)"/>
+<path d="M390 80 Q460 140 448 260 Q444 290 430 310 Q420 290 415 240 Q412 190 410 150 Z" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="150" cy="300" rx="100" ry="150" fill="url(#ag2)" opacity="0.11"/>
+<defs><radialGradient id="ag2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#b8943f"/><stop offset="100%" stop-color="#b8943f" stop-opacity="0"/></radialGradient></defs>
+</svg>
+        </div>
+        <div class="arch-info">
+          <div style="font-family:'Noto Serif SC',serif;font-size:18px;font-weight:400;color:var(--stone3);letter-spacing:.1em;margin-bottom:3px">Iktinos</div>
+          <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--gold)">Iktinos · Chief Architect of Athens</div>
+          <div style="font-size:11px;color:var(--stone2);margin-top:3px">Active 447–420 BCE</div>
+        </div>
+      </div>
+      <div class="arch-text">
+        <span class="eyebrow" style="margin-bottom:12px">Designer</span>
+        <h2 style="font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(22px,3.2vw,40px);color:var(--stone3);margin-bottom:16px">Iktinos</h2>
+        <div class="gold-sep" style="justify-content:flex-start"><div class="gem"></div></div>
+        <p style="font-size:14px;line-height:2.1;color:var(--stone2);margin-bottom:16px">Iktinos was one of the most celebrated architects of the Classical period. Together with Kallikrates, he designed the Parthenon on the Athenian Acropolis — perhaps the most studied building in Western history.</p>
+        <p style="font-size:14px;line-height:2.1;color:var(--stone2);margin-bottom:24px">Commissioned by Pericles, he proposed a revolutionary design for the Telesterion: a near-square hypostyle hall with 42 columns, giving thousands of initiates clear sightlines to the central shrine. The project outlived both Pericles and Iktinos — and was never finished.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-fill" onclick="GO(3)" style="font-size:12px;padding:10px 20px">Speak with Iktinos →</button>
+          <button class="btn" onclick="DP(2)" style="font-size:12px;padding:10px 20px">View 3D Model →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- dp2: 3D Model -->
+  <div class="dp" id="dp2">
+    <div class="dp-model">
+      <div id="mdl-mount"></div>
+      <div class="mdl-vig"></div>
+
+      <!-- top label -->
+      <div class="mdl-lbl" id="mdl-lbl">350 BCE Fire · Ruins</div>
+
+      <!-- info panel — toggleable -->
+      <div id="mdl-info-btn" onclick="toggleMdlInfo()" style="position:absolute;top:20px;right:20px;z-index:20;font-family:'Noto Serif SC',serif;font-size:11px;letter-spacing:.12em;color:var(--stone2);padding:5px 12px;border:1px solid rgba(184,148,63,.22);background:rgba(7,5,2,.7);cursor:none;backdrop-filter:blur(8px)">Historical Context ⓘ</div>
+      <div id="mdl-info-panel" style="display:block;position:absolute;top:52px;right:20px;z-index:20;width:min(360px,42vw);background:rgba(7,5,2,.92);border:1px solid rgba(184,148,63,.22);backdrop-filter:blur(12px);padding:18px 20px;max-height:60vh;overflow-y:auto;">
+        <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.3em;color:var(--gold);margin-bottom:12px;text-transform:uppercase">Sanctuary of Eleusis · Historical Timeline</div>
+        <div style="font-size:12px;line-height:2;color:var(--stone2)">
+          <p style="margin-bottom:10px">The sanctuary was established, with <b style="color:var(--stone3)">the Telesterion (the core ritual hall)</b>，became one of the most important religious sanctuaries in ancient Greece.</p>
+          <p style="margin-bottom:10px"><b style="color:var(--stone3)">c. 170 BCE</b>: After Roman conquest, the sanctuary was rebuilt and expanded.</p>
+          <p style="margin-bottom:10px"><b style="color:var(--stone3)">170 CE · First Fire</b>：The sanctuary was damaged by fire; Emperor Marcus Aurelius ordered repairs.</p>
+          <p style="margin-bottom:10px;padding:8px 10px;border-left:2px solid var(--ember);background:rgba(200,82,26,.08)"><b style="color:var(--ember)">350 BCE · Second Fire ★</b><br>The sanctuary was burned again — this time far more thoroughly.<b style="color:var(--stone3)">This is the moment captured in the ruins model.</b></p>
+          <p style="margin-bottom:10px"><b style="color:var(--stone3)">392 CE</b>：Emperor Theodosius I banned all pagan rites. The Eleusinian Mysteries were abolished. The sanctuary was abandoned and never rebuilt.</p>
+          <p style="margin-bottom:10px"><b style="color:var(--stone3)">Medieval – Modern Era</b>：The site fell to ruin. Local residents stripped stone for other buildings.</p>
+          <p style="margin-bottom:6px;padding-top:8px;border-top:1px solid rgba(184,148,63,.1)"><b style="color:var(--stone3)">Religious Significance</b>：The Eleusinian Mysteries endured nearly 2,000 years. Initiates believed the rites granted happiness and immortality after death.</p>
+          <p style="margin-bottom:6px"><b style="color:var(--stone3)">Reason for Abandonment</b>：The rise of Christianity and the imperial ban on pagan religion — not fire alone — caused the permanent abandonment.</p>
+          <p><b style="color:var(--stone3)">Today</b>：The site is a UNESCO World Heritage site and a core reference for the study of ancient Greek religion and civilisation.</p>
+        </div>
+      </div>
+
+      <!-- bottom controls -->
+      <div class="mdl-ctrl">
+        <button class="mbtn on" id="mb-r" onclick="swM('ruins')">🔥 Ruins</button>
+        <button class="mbtn" id="mb-s" onclick="swM('restored')">✦ Restored</button>
+        <button class="mbtn" id="mb-p" onclick="swM('plan')">📐 Floor Plan</button>
+        <button class="mbtn" id="mb-a" onclick="togAR()">⟳ Rotate</button>
+      </div>
+
+      <!-- upload buttons row -->
+      <div style="position:absolute;bottom:24px;right:20px;display:flex;gap:6px;z-index:20;">
+        <label class="mbtn" style="cursor:none;font-size:10px">
+          Upload Ruins GLB
+          <input type="file" accept=".glb,.gltf" style="display:none" onchange="uploadGLB(this,'ruins')">
+        </label>
+        <label class="mbtn" style="cursor:none;font-size:10px">
+          Upload Restored GLB
+          <input type="file" accept=".glb,.gltf" style="display:none" onchange="uploadGLB(this,'restored')">
+        </label>
+      </div>
+
+      <div id="mdl-ldr"><div class="ldr-ring"></div><div class="ldr-txt">Loading model…</div><div class="ldr-bar-w"><div class="ldr-bar" id="ldr-bar"></div></div></div>
+      <!-- Floor plan image overlay -->
+      <div id="plan-overlay" style="display:none;position:absolute;inset:0;z-index:15;background:linear-gradient(160deg,#0c0a06,#070502);flex-direction:column;align-items:center;justify-content:center;overflow:hidden;">
+        <!-- subtle grid texture -->
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(184,148,63,.06) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;"></div>
+        <!-- ambient glow under image -->
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;background:radial-gradient(ellipse,rgba(184,148,63,.07) 0%,transparent 70%);pointer-events:none;"></div>
+        <!-- back button -->
+        <button onclick="swM('ruins')" style="position:absolute;top:20px;left:20px;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.2em;padding:8px 18px;border:1px solid rgba(184,148,63,.3);background:transparent;color:rgba(184,148,63,.7);cursor:pointer;transition:all .25s;z-index:2;" onmouseover="this.style.color='#d4b060';this.style.borderColor='rgba(184,148,63,.7)'" onmouseout="this.style.color='rgba(184,148,63,.7)';this.style.borderColor='rgba(184,148,63,.3)'">← Back to 3D</button>
+        <!-- label -->
+        <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.4em;color:rgba(184,148,63,.55);text-transform:uppercase;white-space:nowrap;z-index:2;">Floor Plan · Eleusis Sanctuary</div>
+        <!-- plan image — white lines glow on dark -->
+        <img src="/plan.png" alt="Floor Plan" style="position:relative;z-index:1;max-width:85%;max-height:85%;object-fit:contain;filter:brightness(1.1) contrast(1.05);mix-blend-mode:lighten;">
+      </div>
+    </div>
+  </div>
+
+  <!-- dp3: Historical Timeline -->
+  <div class="dp" id="dp3">
+    <div class="dp-tl">
+      <span class="eyebrow" style="margin-bottom:10px;display:block">Historical Timeline</span>
+      <h2 style="font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(20px,3vw,36px);color:var(--stone3)">The Unfinished Years</h2>
+      <div class="tl-wrap">
+        <div class="tl-spine"></div>
+        <div class="tl-row"><div class="tl-l"><span class="tl-yr">760 BCE</span><div class="tl-title">The First Sanctuary</div><p class="tl-body">The earliest sanctuary at Eleusis was established. The Mysteries were held in modest surroundings — initiates gathered to hear the story of Demeter.</p></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot"></div></div><div class="tl-r"></div></div>
+        <div class="tl-row"><div class="tl-l"></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot"></div></div><div class="tl-r"><span class="tl-yr">600 BCE</span><div class="tl-title">Solon's Expansion</div><p class="tl-body">Athens ordered an expansion of the Telesterion. Grand plans were drawn, but construction was interrupted repeatedly by political upheaval.</p></div></div>
+        <div class="tl-row"><div class="tl-l"><span class="tl-yr">480 BCE</span><div class="tl-title">Persian Destruction</div><p class="tl-body">Persian forces burned the sanctuary to the ground. Everything was lost. The dream began again from rubble.</p></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot" style="background:var(--ember);box-shadow:0 0 10px rgba(200,82,26,.55)"></div></div><div class="tl-r"></div></div>
+        <div class="tl-row"><div class="tl-l"></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot"></div></div><div class="tl-r"><span class="tl-yr">440 BCE</span><div class="tl-title">Iktinos's Design</div><p class="tl-body">The architect of the Parthenon proposed a hall for 3,000 initiates. It was never completed.</p></div></div>
+        <div class="tl-row"><div class="tl-l"><span class="tl-yr">396 CE</span><div class="tl-title">Permanent Silence</div><p class="tl-body">Alaric's Goths sacked Eleusis. The Mysteries — sustained for nearly a millennium — fell silent. The Telesterion was left forever unfinished.</p></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot" style="background:var(--stone2);box-shadow:none"></div></div><div class="tl-r"></div></div>
+        <div class="tl-row"><div class="tl-l"></div><div style="display:flex;align-items:flex-start;justify-content:center;padding-top:4px"><div class="tl-dot" style="background:var(--goldL);box-shadow:0 0 14px rgba(212,176,96,.65)"></div></div><div class="tl-r"><span class="tl-yr">2025</span><div class="tl-title">Revival · 2025</div><p class="tl-body">We use technology to rebuild what was never completed — and invite you to write a letter across time, so civilisation never truly disappears.</p></div></div>
+      </div>
+      <div style="margin-top:18px;text-align:center">
+        <button class="btn btn-fill" onclick="GO(3)" style="font-size:12px;padding:10px 24px">Speak with the Architect →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- detail nav -->
+  <div class="dp-arrows">
+    <button class="dpa hide" id="dpa-up" onclick="DP(window._curDP()-1)">↑</button>
+    <button class="dpa" id="dpa-dn" onclick="DP(window._curDP()+1)">↓</button>
+  </div>
+  <div class="dp-dots">
+    <div class="dpdot on" id="dd0" onclick="DP(0)"></div>
+    <div class="dpdot" id="dd1" onclick="DP(1)"></div>
+    <div class="dpdot" id="dd2" onclick="DP(2)"></div>
+    <div class="dpdot" id="dd3" onclick="DP(3)"></div>
+  </div>
+</div>
+
+<!-- ══════════ S3: Chat ══════════ -->
+<div id="s3" class="screen">
+  <div class="chat-portrait">
+    <div class="cp-bg"></div>
+    <div class="cp-fig">
+      <svg width="280" height="460" viewBox="0 0 680 820" fill="none" style="filter:drop-shadow(0 0 36px rgba(184,148,63,.13))">
+<defs>
+  <clipPath id="faceClip"><ellipse cx="340" cy="210" rx="108" ry="130"/></clipPath>
+  <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c9a882"/>
+    <stop offset="100%" stop-color="#a07850"/>
+  </linearGradient>
+  <linearGradient id="robeGrad" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0%" stop-color="#e8e0d0"/>
+    <stop offset="100%" stop-color="#c8bfa8"/>
+  </linearGradient>
+  <linearGradient id="shadowGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
+    <stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
+  </linearGradient>
+  <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#8a6820"/>
+    <stop offset="40%" stop-color="#d4a84b"/>
+    <stop offset="70%" stop-color="#f0c96a"/>
+    <stop offset="100%" stop-color="#b8943f"/>
+  </linearGradient>
+  <linearGradient id="scrollGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#d4b87a"/>
+    <stop offset="100%" stop-color="#c4a460"/>
+  </linearGradient>
+  <radialGradient id="glowGrad2" cx="50%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#b8943f" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#b8943f" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<ellipse cx="340" cy="300" rx="320" ry="350" fill="url(#glowGrad2)"/>
+<rect x="110" y="100" width="18" height="680" rx="4" fill="#c8b89a" opacity="0.04"/>
+<rect x="552" y="100" width="18" height="680" rx="4" fill="#c8b89a" opacity="0.04"/>
+<rect x="308" y="320" width="64" height="80" rx="8" fill="url(#skinGrad)"/>
+<rect x="308" y="320" width="64" height="80" rx="8" fill="url(#shadowGrad)" opacity="0.4"/>
+<path d="M160 820 L160 500 Q180 430 220 410 Q270 390 340 385 Q410 390 460 410 Q500 430 520 500 L520 820 Z" fill="url(#robeGrad)"/>
+<path d="M160 820 L160 500 Q175 445 200 420 L220 430 Q195 455 195 520 L195 820 Z" fill="rgba(0,0,0,0.13)"/>
+<path d="M520 820 L520 500 Q505 445 480 420 L460 430 Q485 455 485 520 L485 820 Z" fill="rgba(0,0,0,0.13)"/>
+<path d="M240 820 Q242 650 246 560 Q250 500 258 460" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="2"/>
+<path d="M280 820 Q281 700 284 600 Q287 530 292 480" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1.5"/>
+<path d="M340 820 Q340 720 340 620 Q340 550 342 490" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1.5"/>
+<path d="M400 820 Q399 700 396 600 Q393 530 388 480" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1.5"/>
+<path d="M440 820 Q438 650 434 560 Q430 500 422 460" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="2"/>
+<path d="M310 820 Q312 700 315 580 Q318 500 325 440" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="3"/>
+<circle cx="430" cy="430" r="9" fill="#b8943f" stroke="#d4b060" stroke-width="1.5"/>
+<circle cx="430" cy="430" r="4" fill="#f0c96a"/>
+<path d="M460 430 Q510 460 530 520 Q545 570 540 620" fill="none" stroke="url(#skinGrad)" stroke-width="42" stroke-linecap="round"/>
+<path d="M460 430 Q510 460 530 520 Q545 570 540 620" fill="none" stroke="#a07850" stroke-width="42" stroke-linecap="round" opacity="0.3"/>
+<ellipse cx="535" cy="625" rx="24" ry="20" fill="url(#skinGrad)"/>
+<rect x="520" y="600" width="70" height="44" rx="6" fill="url(#scrollGrad)" transform="rotate(-15,555,622)"/>
+<line x1="524" y1="612" x2="580" y2="601" stroke="rgba(100,70,20,0.35)" stroke-width="1.2"/>
+<line x1="522" y1="622" x2="578" y2="611" stroke="rgba(100,70,20,0.35)" stroke-width="1"/>
+<line x1="520" y1="632" x2="576" y2="621" stroke="rgba(100,70,20,0.28)" stroke-width="0.8"/>
+<ellipse cx="523" cy="622" rx="5" ry="14" fill="#c4a460" stroke="#a8883e" stroke-width="0.5" transform="rotate(-15,523,622)"/>
+<ellipse cx="587" cy="608" rx="5" ry="14" fill="#c4a460" stroke="#a8883e" stroke-width="0.5" transform="rotate(-15,587,608)"/>
+<path d="M220 430 Q175 470 165 540 Q158 590 162 640" fill="none" stroke="url(#skinGrad)" stroke-width="38" stroke-linecap="round"/>
+<path d="M220 430 Q175 470 165 540 Q158 590 162 640" fill="none" stroke="#a07850" stroke-width="38" stroke-linecap="round" opacity="0.25"/>
+<ellipse cx="163" cy="645" rx="22" ry="18" fill="url(#skinGrad)"/>
+<ellipse cx="340" cy="210" rx="108" ry="130" fill="url(#skinGrad)"/>
+<path d="M250 250 Q260 310 290 330 Q320 345 340 345 Q360 345 390 330 Q420 310 430 250" fill="url(#skinGrad)"/>
+<path d="M262 260 Q270 305 295 322 Q318 336 340 336 Q362 336 365 324" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="3"/>
+<ellipse cx="283" cy="230" rx="28" ry="18" fill="rgba(0,0,0,0.08)" opacity="0.7"/>
+<ellipse cx="397" cy="230" rx="28" ry="18" fill="rgba(0,0,0,0.08)" opacity="0.7"/>
+<ellipse cx="278" cy="220" rx="14" ry="9" fill="rgba(255,255,255,0.09)"/>
+<ellipse cx="402" cy="220" rx="14" ry="9" fill="rgba(255,255,255,0.09)"/>
+<path d="M256 178 Q285 168 320 172 Q330 173 340 173 Q350 173 360 172 Q395 168 424 178" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="4" stroke-linecap="round"/>
+<path d="M258 176 Q285 167 320 171 Q340 171 360 171 Q395 167 422 176" fill="none" stroke="rgba(80,50,20,0.2)" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="300" cy="196" rx="26" ry="14" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="380" cy="196" rx="26" ry="14" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="300" cy="197" rx="20" ry="11" fill="#f0e8d8"/>
+<ellipse cx="380" cy="197" rx="20" ry="11" fill="#f0e8d8"/>
+<ellipse cx="300" cy="197" rx="11" ry="11" fill="#4a3820"/>
+<ellipse cx="300" cy="197" rx="7" ry="7" fill="#2a1e10"/>
+<ellipse cx="296" cy="193" rx="3" ry="3" fill="rgba(255,255,255,0.45)"/>
+<ellipse cx="380" cy="197" rx="11" ry="11" fill="#4a3820"/>
+<ellipse cx="380" cy="197" rx="7" ry="7" fill="#2a1e10"/>
+<ellipse cx="376" cy="193" rx="3" ry="3" fill="rgba(255,255,255,0.45)"/>
+<path d="M280 192 Q300 184 320 192 Q300 200 280 192" fill="rgba(0,0,0,0.12)"/>
+<path d="M360 192 Q380 184 400 192 Q380 200 360 192" fill="rgba(0,0,0,0.12)"/>
+<path d="M281 191 Q300 184 319 191" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+<path d="M361 191 Q380 184 399 191" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+<path d="M282 202 Q300 208 318 202" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+<path d="M362 202 Q380 208 398 202" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+<path d="M340 175 L335 230 Q332 242 330 248" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M340 178 L337 220" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M330 248 Q332 256 340 258 Q348 256 350 248" fill="rgba(0,0,0,0.12)"/>
+<ellipse cx="327" cy="252" rx="8" ry="5" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="353" cy="252" rx="8" ry="5" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="340" cy="253" rx="5" ry="3" fill="rgba(255,255,255,0.08)"/>
+<path d="M308 278 Q322 272 340 274 Q358 272 372 278 Q358 285 340 283 Q322 285 308 278" fill="#8a5a3a"/>
+<path d="M316 276 Q326 270 340 273 Q354 270 364 276" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+<path d="M308 278 Q324 294 340 295 Q356 294 372 278 Q358 285 340 283 Q322 285 308 278" fill="#7a4e32"/>
+<ellipse cx="340" cy="287" rx="15" ry="4" fill="rgba(255,255,255,0.07)"/>
+<ellipse cx="308" cy="279" rx="5" ry="3" fill="rgba(0,0,0,0.15)"/>
+<ellipse cx="372" cy="279" rx="5" ry="3" fill="rgba(0,0,0,0.15)"/>
+<path d="M334 262 L332 272 M346 262 L348 272" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1.2"/>
+<ellipse cx="234" cy="218" rx="16" ry="22" fill="#b8906a"/>
+<ellipse cx="234" cy="218" rx="10" ry="16" fill="#a07850"/>
+<ellipse cx="446" cy="218" rx="16" ry="22" fill="#b8906a"/>
+<ellipse cx="446" cy="218" rx="10" ry="16" fill="#a07850"/>
+<path d="M232 140 Q250 80 340 72 Q430 80 448 140 Q430 110 400 100 Q370 92 340 90 Q310 92 280 100 Q250 110 232 140" fill="#2a1e0e"/>
+<path d="M240 130 Q260 108 295 102 Q318 97 340 96" fill="none" stroke="#3a2e1a" stroke-width="3" stroke-linecap="round"/>
+<path d="M448 130 Q428 108 395 102 Q368 97 345 96" fill="none" stroke="#3a2e1a" stroke-width="3" stroke-linecap="round"/>
+<path d="M233 148 Q256 88 340 78 Q424 88 447 148 Q425 118 395 106 Q368 97 340 94 Q312 97 285 106 Q255 118 233 148" fill="rgba(0,0,0,0.3)"/>
+<g opacity="0.92">
+  <path d="M242 148 Q230 138 225 128" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="228" cy="138" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-30,228,138)"/>
+  <ellipse cx="218" cy="128" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-50,218,128)"/>
+  <path d="M255 138 Q245 124 242 112" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="246" cy="126" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-20,246,126)"/>
+  <ellipse cx="242" cy="113" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-40,242,113)"/>
+  <path d="M272 126 Q264 110 265 97" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="266" cy="114" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-10,266,114)"/>
+  <ellipse cx="265" cy="99" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-5,265,99)"/>
+  <path d="M293 114 Q289 98 293 85" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="291" cy="100" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(5,291,100)"/>
+  <ellipse cx="293" cy="86" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(10,293,86)"/>
+  <path d="M438 148 Q450 138 455 128" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="452" cy="138" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(30,452,138)"/>
+  <ellipse cx="462" cy="128" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(50,462,128)"/>
+  <path d="M425 138 Q435 124 438 112" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="434" cy="126" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(20,434,126)"/>
+  <ellipse cx="438" cy="113" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(40,438,113)"/>
+  <path d="M408 126 Q416 110 415 97" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="414" cy="114" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(10,414,114)"/>
+  <ellipse cx="415" cy="99" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(5,415,99)"/>
+  <path d="M387 114 Q391 98 387 85" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="389" cy="100" rx="10" ry="6" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5" transform="rotate(-5,389,100)"/>
+  <ellipse cx="387" cy="86" rx="9" ry="5.5" fill="#c8a84f" stroke="#d4b060" stroke-width="0.5" transform="rotate(-10,387,86)"/>
+  <path d="M316 80 Q328 76 340 75 Q352 76 364 80" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="340" cy="77" rx="12" ry="7" fill="#c8a84f" stroke="#d4b060" stroke-width="0.8"/>
+  <ellipse cx="324" cy="80" rx="9" ry="5.5" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5"/>
+  <ellipse cx="356" cy="80" rx="9" ry="5.5" fill="#b8943f" stroke="#d4a84b" stroke-width="0.5"/>
+</g>
+<path d="M295 310 Q300 340 316 355 Q328 363 340 364 Q352 363 364 355 Q380 340 385 310 Q372 325 355 332 Q347 335 340 335 Q333 335 325 332 Q308 325 295 310" fill="#2a1e0e"/>
+<path d="M308 318 Q312 342 320 354" fill="none" stroke="#1a1208" stroke-width="1.5" opacity="0.6"/>
+<path d="M325 325 Q328 348 333 358" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M340 328 Q340 350 340 362" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M355 325 Q352 348 347 358" fill="none" stroke="#1a1208" stroke-width="1" opacity="0.5"/>
+<path d="M372 318 Q368 342 360 354" fill="none" stroke="#1a1208" stroke-width="1.5" opacity="0.6"/>
+<path d="M308 278 Q320 282 340 280 Q360 282 372 278" fill="#2a1e0e"/>
+<path d="M310 276 Q325 282 340 280 Q355 282 370 276" fill="none" stroke="#1a1208" stroke-width="1.5" stroke-linecap="round"/>
+<ellipse cx="300" cy="160" rx="55" ry="45" fill="rgba(255,255,255,0.05)"/>
+<path d="M390 80 Q460 140 448 260 Q444 290 430 310 Q420 290 415 240 Q412 190 410 150 Z" fill="rgba(0,0,0,0.1)"/>
+<ellipse cx="150" cy="300" rx="100" ry="150" fill="url(#ag2)" opacity="0.11"/>
+<defs><radialGradient id="ag2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#b8943f"/><stop offset="100%" stop-color="#b8943f" stop-opacity="0"/></radialGradient></defs>
+</svg>
+    </div>
+    <div class="cp-info">
+      <div class="cp-name">Iktinos</div>
+      <div class="cp-role">Designer of the Telesterion · Spirit</div>
+      <div class="cp-era">Athens · 447–420 BCE</div>
+    </div>
+  </div>
+  <div class="chat-right">
+    <div class="chat-hdr">
+      <div class="chat-hdr-t">A Conversation Across Time</div>
+      <div class="revival-hint">Enter the passphrase <b>rEvival</b> to complete your awakening</div>
+    </div>
+    <div class="chat-msgs" id="cmsgs">
+      <div class="msg msg-a">
+        <div class="bubble">You have found the threshold of the unfinished work. I am Iktinos, designer of the Telesterion. This hall was conceived for sacred rites, designed for thousands — and never completed. Traveller, what would you ask?</div>
+        <div class="msg-meta">Iktinos · This moment</div>
+      </div>
+    </div>
+    <div class="revival-prompt" id="revival-prompt">
+      When you have understood this design and carried this civilisation in your heart, enter the passphrase to complete your awakening: <b>rEvival</b>
+    </div>
+    <div class="chat-inp-wrap">
+      <div class="chat-inp-row">
+        <textarea id="cinp" placeholder="Ask Iktinos about the Telesterion, the Mysteries, the fire…" rows="1" onkeydown="ckd(event)" oninput="crs(this)"></textarea>
+        <button id="csend" onclick="CHAT()">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ S4: 天空留言 ══════════ -->
+<div id="s4" class="screen">
+  <canvas id="lcv"></canvas>
+  <div id="sky-bg"></div>
+  <div id="sky-dim"></div>
+  <div id="spotlight">
+    <span class="sp-name" id="sp-name"></span>
+    <span class="sp-text" id="sp-text"></span>
+  </div>
+  <div id="sky-dots"></div>
+  <p id="sky-hint">Click or Space to continue</p>
+  <div id="sky-cta">
+    <p class="cta-line">You have read what they left behind.<br><em>Now, it is your turn.</em></p>
+    <button class="btn btn-fill" onclick="enterWrite()" style="font-size:13px;padding:14px 52px;letter-spacing:.22em">Leave your words →</button>
+  </div>
+  <div id="sky-write">
+    <div class="write-speaker">Iktinos</div>
+    <p class="write-prompt">To this hall that was never finished —<br>speak the words that are yours alone.</p>
+    <div class="write-form">
+      <div class="write-name-row">
+        <span class="write-name-label">Sign</span>
+        <input type="text" id="wname" placeholder="Your name" maxlength="30"
+          onkeydown="if(event.key==='Enter')document.getElementById('wmsg').focus()">
+      </div>
+      <textarea id="wmsg" placeholder="Write what you would say…" maxlength="160"
+        oninput="wc()"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();LETTER();}">
+      </textarea>
+      <div class="write-footer">
+        <span class="write-count"><span id="wcn">0</span> / 160</span>
+        <button id="wsub" onclick="LETTER()">Inscribe this ✦</button>
+      </div>
+      <button class="write-skip" onclick="GO(5)">Skip →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ S5: 记忆之树 ══════════ -->
+<div id="s5" class="screen">
+  <div class="book-outer">
+    <div class="book-body">
+      <div class="book-spine"></div>
+      <div class="bc bc-tl"></div><div class="bc bc-tr"></div>
+      <div class="bc bc-bl"></div><div class="bc bc-br"></div>
+      <div class="book-inner">
+        <div class="book-hdr">
+          <div class="book-title">Memory Book · Letters of Revival</div>
+          <div class="book-pgn" id="bpgn">Traveller 1 页</div>
+        </div>
+        <div class="book-entries" id="bentries">
+          <div style="text-align:center;padding:36px;font-size:13px;color:var(--stone2)">Loading records…</div>
+        </div>
+        <div class="book-nav">
+          <button class="bnav-btn" onclick="BP(-1)">‹</button>
+          <div class="bnav-pgr" id="bpgr">1 / 1</div>
+          <button class="bnav-btn" onclick="BP(1)">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:12px">
+    <button class="btn" onclick="GO(4)" style="font-size:11px;padding:8px 18px">← Add a Letter</button>
+    <button class="btn" onclick="GO(1)" style="font-size:11px;padding:8px 18px">Back to Map</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 高级名字输入覆盖层 -->
+<div id="name-overlay">
+  <div class="name-card">
+    <div class="name-card-gem"></div>
+    <h2 class="name-card-title">Leave Your Name</h2>
+    <p class="name-card-sub">Your name will be inscribed in the Memory Book, preserved forever.</p>
+    <input type="text" class="name-card-input" id="name-input"
+      placeholder="Enter your name" maxlength="20"
+      onkeydown="if(event.key==='Enter')confirmName()">
+    <button class="name-card-btn" onclick="confirmName()">Confirm and Begin →</button>
+    <p class="name-card-note">Your name will be recorded alongside this conversation that spans a thousand years.</p>
+  </div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const API = location.hostname==='localhost'?'http://localhost:3000/api':'/api';
+
+/* ── CURSOR ── */
+const dot=document.getElementById('cur'),ring=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function ac(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ac);})();
+document.querySelectorAll('a,button,canvas').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+});
+
+/* ── PARTICLES ── */
+(()=>{
+  const cv=document.getElementById('ptc'),cx=cv.getContext('2d');
+  let W,H,pts=[];
+  const rs=()=>{cv.width=W=innerWidth;cv.height=H=innerHeight;};
+  rs();window.addEventListener('resize',rs);
+  class P{
+    constructor(){this.reset(true);}
+    reset(i=false){this.x=Math.random()*W;this.y=i?Math.random()*H:H+10;this.vx=(Math.random()-.5)*.22;this.vy=-(Math.random()*.3+.06);this.r=Math.random()*1.2+.2;this.a=Math.random()*.35+.07;this.life=0;this.max=Math.random()*280+170;}
+    step(){
+      this.x+=this.vx;this.y+=this.vy;this.life++;
+      const dx=this.x-mX,dy=this.y-mY,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<80){this.vx+=dx/d*.04;this.vy+=dy/d*.04;}
+      this.vx*=.99;this.vy*=.99;
+      if(this.life>this.max||this.y<-10)this.reset();
+    }
+    draw(){const p=Math.min(this.life/40,(this.max-this.life)/40,1);cx.globalAlpha=this.a*p;cx.fillStyle='#c8a86a';cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fill();}
+  }
+  for(let i=0;i<90;i++)pts.push(new P());
+  let mX=W/2,mY=H/2;
+  document.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
+  (function fr(){cx.clearRect(0,0,W,H);pts.forEach(p=>{p.step();p.draw();});cx.globalAlpha=1;requestAnimationFrame(fr);})();
+})();
+
+/* ══════════════════════════
+   SCREEN ROUTER
+══════════════════════════ */
+let CS=0;
+const SCS=['s0','s1','s2','s3','s4','s5'];
+window.GO=function(idx){
+  if(idx<0||idx>5||idx===CS)return;
+  document.getElementById(SCS[CS]).classList.remove('on');
+  CS=idx;
+  document.getElementById(SCS[CS]).classList.add('on');
+  document.querySelectorAll('.nd').forEach((d,i)=>d.classList.toggle('on',i===CS));
+  if(CS===2&&!mdlInited)initMdl();
+  if(CS===3)resetChat();
+  if(CS===5)loadBook(0);
+  if(CS===4){
+    // Full reset every entry — IDs match actual S4 HTML
+    skyIdx=-1; clearTimeout(skyAutoTimer); wallInited=false;
+    const sp=document.getElementById('spotlight');
+    if(sp){sp.classList.remove('on');}
+    const dim=document.getElementById('sky-dim');
+    if(dim){dim.classList.remove('on');}
+    const cta=document.getElementById('sky-cta');
+    if(cta){cta.classList.remove('show');}
+    const hint=document.getElementById('sky-hint');
+    if(hint){hint.style.opacity='1';hint.textContent='Auto-playing · click to skip';}
+    const wr=document.getElementById('sky-write');
+    if(wr){wr.classList.remove('show');wr.style.opacity='';wr.style.transform='';wr.style.transition='';}
+    const bg=document.getElementById('sky-bg');
+    if(bg){bg.style.opacity='';bg.style.transition='';}
+    const lc=document.getElementById('lcv');
+    if(lc){lc.style.opacity='';lc.style.transition='';}
+    const dots=document.getElementById('sky-dots');
+    if(dots){dots.innerHTML='';}
+    document.getElementById('wmsg').value='';
+    document.getElementById('wcn').textContent='0';
+    initWall();
+  }
+};
+
+/* ── Keyboard nav ── */
+const TOTAL_IS=5;
+
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement?.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();
+    if(CS===0&&curIS<TOTAL_IS-1)SI(curIS+1);
+    else if(CS===2&&curDP<3)DP(curDP+1);
+    else if(CS<5)GO(CS+1);}
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();
+    if(CS===0&&curIS>0)SI(curIS-1);
+    else if(CS===2&&curDP>0)DP(curDP-1);
+    else if(CS>0)GO(CS-1);}
+});
+
+/* ══════════════════════════
+   INTRO SLIDES
+══════════════════════════ */
+let curIS=0;
+
+// Build slide dots dynamically
+(function(){
+  const dc=document.getElementById('sdots');
+  if(!dc)return;
+  for(let i=0;i<TOTAL_IS;i++){
+    const d=document.createElement('div');
+    d.className='sdot'+(i===0?' on':'');
+    d.id='sd'+i;
+    d.onclick=()=>SI(i);
+    dc.appendChild(d);
+  }
+})();
+
+window.SI=function(idx){
+  if(idx<0||idx>=TOTAL_IS||idx===curIS)return;
+  document.getElementById('is'+curIS).classList.remove('on');
+  curIS=idx;
+  document.getElementById('is'+curIS).classList.add('on');
+  for(let i=0;i<TOTAL_IS;i++){
+    const d=document.getElementById('sd'+i);
+    if(d)d.classList.toggle('on',i===curIS);
+  }
+};
+
+/* ══════════════════════════
+   DETAIL PAGES
+══════════════════════════ */
+let curDP=0;window._curDP=()=>curDP;
+window.DP=function(idx){
+  if(idx<0||idx>3||idx===curDP)return;
+  document.getElementById('dp'+curDP).classList.remove('on');
+  curDP=idx;
+  document.getElementById('dp'+curDP).classList.add('on');
+  ['dd0','dd1','dd2','dd3'].forEach((id,i)=>document.getElementById(id).classList.toggle('on',i===curDP));
+  document.getElementById('dpa-up').classList.toggle('hide',curDP===0);
+  document.getElementById('dpa-dn').classList.toggle('hide',curDP===3);
+  if(curDP===2&&!mdlInited)initMdl();
+};
+
+/* ══════════════════════════
+   WORLD MAP
+══════════════════════════ */
+(()=>{
+  const cv=document.getElementById('map-cv'),cx=cv.getContext('2d');
+  let W,H;
+  const rs=()=>{cv.width=W=innerWidth;cv.height=H=innerHeight;};
+  rs();window.addEventListener('resize',rs);
+
+  const sites=[
+    {lon:23.54,lat:38.04,name:'Telesterion · Eleusis',desc:'Ancient Greek mystery sanctuary · 760 BCE – 396 CE',target:2,main:true},
+    {lon:12.49,lat:41.89,name:'Basilica of Maxentius',desc:'Rome · Unfinished forum complex · 307 CE',target:null},
+    {lon:-0.12,lat:51.51,name:'Crystal Palace Extension',desc:'London · Victorian expansion · 1858',target:null},
+    {lon:2.35,lat:48.85,name:'Tour Sans Fins',desc:'Paris · Endless tower · 1989',target:null},
+    {lon:116.39,lat:39.91,name:'Great Bell Tower',desc:'Beijing · Ming dynasty · 1420',target:null},
+    {lon:-74.01,lat:40.71,name:'WTC Spire',desc:'New York · Antenna design · 2001',target:null},
+    {lon:37.62,lat:55.75,name:'Palace of Soviets',desc:'Moscow · Stalinist supertall · 1931',target:null},
+    {lon:139.69,lat:35.69,name:'Sky City 1000',desc:'Tokyo · 1km supertall · 1989',target:null},
+    {lon:72.88,lat:19.07,name:'Bombay Cathedral',desc:'Mumbai · Gothic revival · 1716',target:null},
+  ];
+
+  function proj(lon,lat){return{x:((lon+180)/360)*W,y:((90-lat)/180)*H};}
+  let t=0;
+
+  function land(){
+    function p(coords){cx.beginPath();coords.forEach(([lo,la],i)=>{const pt=proj(lo,la);i?cx.lineTo(pt.x,pt.y):cx.moveTo(pt.x,pt.y);});cx.closePath();cx.fill();}
+    cx.fillStyle='rgba(184,148,63,.055)';
+    p([[-140,60],[-55,50],[-60,45],[-75,40],[-80,25],[-90,15],[-85,10],[-105,20],[-120,30],[-125,40],[-130,50],[-140,55]]);
+    p([[-80,10],[-60,5],[-50,-10],[-40,-20],[-55,-35],[-65,-55],[-70,-50],[-75,-40],[-80,-20],[-80,0]]);
+    p([[0,50],[30,50],[30,40],[20,35],[10,36],[0,43],[-5,44],[-10,38],[-8,36],[5,36],[15,38],[25,37],[28,41],[30,45],[20,48],[10,48],[0,48]]);
+    p([[-20,15],[40,15],[50,10],[45,0],[30,-10],[20,-35],[18,-34],[15,-20],[10,5],[0,5],[-15,10]]);
+    p([[30,50],[140,50],[140,40],[130,30],[120,25],[110,20],[100,15],[95,5],[90,20],[80,30],[70,35],[60,30],[50,25],[40,38],[30,40]]);
+    p([[130,45],[145,45],[145,33],[135,33],[132,34]]);
+    p([[115,-22],[150,-22],[150,-38],[138,-38],[130,-33],[115,-30]]);
+    p([[-3,50],[2,52],[0,58],[-5,58],[-5,53]]);
+    p([[5,57],[25,70],[30,65],[25,58],[15,56]]);
+  }
+
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    const bg=cx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/1.4);
+    bg.addColorStop(0,'#0e0b06');bg.addColorStop(1,'#060402');
+    cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+    cx.strokeStyle='rgba(184,148,63,.042)';cx.lineWidth=.5;
+    for(let lo=-180;lo<=180;lo+=30){const a=proj(lo,90),b=proj(lo,-90);cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke();}
+    for(let la=-60;la<=60;la+=30){const a=proj(-180,la),b=proj(180,la);cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke();}
+    land();
+    t+=0.022;
+    sites.forEach(s=>{
+      const{x,y}=proj(s.lon,s.lat);
+      const pulse=Math.sin(t+(s.lon+s.lat)*.1)*.5+.5;
+      const gr=s.main?(18+pulse*11):(9+pulse*5);
+      const g=cx.createRadialGradient(x,y,0,x,y,gr);
+      g.addColorStop(0,s.main?`rgba(212,176,96,${.32+pulse*.18})`:`rgba(120,120,120,${.1+pulse*.06})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      cx.fillStyle=g;cx.beginPath();cx.arc(x,y,gr,0,Math.PI*2);cx.fill();
+      cx.fillStyle=s.main?`rgba(212,176,96,${.82+pulse*.18})`:`rgba(130,130,130,${.45+pulse*.1})`;
+      cx.beginPath();cx.arc(x,y,s.main?(2.5+pulse*1.5):(1.8+pulse*.7),0,Math.PI*2);cx.fill();
+      if(s.main){cx.strokeStyle=`rgba(212,176,96,${.38+pulse*.28})`;cx.lineWidth=1;cx.beginPath();cx.arc(x,y,7+pulse*4,0,Math.PI*2);cx.stroke();}
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  const tip=document.getElementById('tip');
+  cv.addEventListener('mousemove',e=>{
+    if(CS!==1)return;
+    const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    let found=null;
+    sites.forEach(s=>{const{x,y}=proj(s.lon,s.lat);if(Math.hypot(mx-x,my-y)<22)found=s;});
+    if(found){document.getElementById('tip-n').textContent=found.name;document.getElementById('tip-d').textContent=found.desc;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';tip.style.opacity='1';}
+    else{tip.style.opacity='0';}
+  });
+  cv.addEventListener('click',e=>{
+    if(CS!==1)return;
+    const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    sites.forEach(s=>{const{x,y}=proj(s.lon,s.lat);if(Math.hypot(mx-x,my-y)<22&&s.target!==null)GO(s.target);});
+  });
+})();
+
+/* ══════════════════════════
+   THREE.JS 3D模型
+══════════════════════════ */
+let mdlInited=false,mdlScene,mdlRen,mdlCam,mdlCtrl,mdlGnd;
+let mdlG={ruins:null,restored:null},mdlAct='ruins',mdlAR=true;
+
+function initMdl(){
+  mdlInited=true;
+  const mnt=document.getElementById('mdl-mount');
+  mdlRen=new THREE.WebGLRenderer({antialias:true});
+  mdlRen.setPixelRatio(Math.min(devicePixelRatio,2));
+  mdlRen.setSize(mnt.clientWidth,mnt.clientHeight);
+  mdlRen.shadowMap.enabled=true;mdlRen.shadowMap.type=THREE.PCFSoftShadowMap;
+  mdlRen.toneMapping=THREE.ACESFilmicToneMapping;mdlRen.toneMappingExposure=1.4;
+  mnt.appendChild(mdlRen.domElement);
+
+  mdlScene=new THREE.Scene();
+  mdlScene.background=new THREE.Color(0x070502);
+  mdlScene.fog=new THREE.FogExp2(0x090703,.012);
+
+  mdlCam=new THREE.PerspectiveCamera(45,mnt.clientWidth/mnt.clientHeight,.1,500);
+  mdlCam.position.set(0,6,18);
+
+  mdlCtrl=new OrbitControls(mdlCam,mdlRen.domElement);
+  mdlCtrl.enableDamping=true;mdlCtrl.dampingFactor=.055;
+  mdlCtrl.minDistance=3;mdlCtrl.maxDistance=60;
+  mdlCtrl.maxPolarAngle=Math.PI*.55;
+  mdlCtrl.autoRotate=true;mdlCtrl.autoRotateSpeed=.4;
+  mdlCtrl.target.set(0,2,0);
+
+  // Lighting rig
+  mdlScene.add(new THREE.AmbientLight(0xffe8c0,0.8));
+  const sun=new THREE.DirectionalLight(0xfff5e0,3.5);
+  sun.position.set(15,30,20);sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);
+  sun.shadow.camera.left=sun.shadow.camera.bottom=-25;
+  sun.shadow.camera.right=sun.shadow.camera.top=25;
+  mdlScene.add(sun);
+  const fill=new THREE.DirectionalLight(0x8899bb,.5);fill.position.set(-10,5,-15);mdlScene.add(fill);
+  const rim=new THREE.DirectionalLight(0xffd080,.4);rim.position.set(0,10,-20);mdlScene.add(rim);
+  mdlScene.add(new THREE.HemisphereLight(0xfff0d0,0x1a1208,.6));
+
+  mdlGnd=new THREE.Mesh(
+    new THREE.PlaneGeometry(200,200),
+    new THREE.MeshStandardMaterial({color:0x1a1208,roughness:.98,metalness:0})
+  );
+  mdlGnd.rotation.x=-Math.PI/2;mdlGnd.receiveShadow=true;mdlScene.add(mdlGnd);
+
+  // Load ruins (350 BCE fire) by default
+  loadGLB('/ruins.glb', false, 'ruins');
+
+  new ResizeObserver(()=>{
+    const mnt=document.getElementById('mdl-mount');if(!mnt||!mdlRen)return;
+    mdlRen.setSize(mnt.clientWidth,mnt.clientHeight);
+    mdlCam.aspect=mnt.clientWidth/mnt.clientHeight;mdlCam.updateProjectionMatrix();
+  }).observe(mnt);
+
+  (function loop(){mdlCtrl.update();mdlRen.render(mdlScene,mdlCam);requestAnimationFrame(loop);})();
+}
+
+// Fit loaded model into view
+function fitModel(obj){
+  const box=new THREE.Box3().setFromObject(obj);
+  const size=box.getSize(new THREE.Vector3());
+  const center=box.getCenter(new THREE.Vector3());
+  const maxDim=Math.max(size.x,size.y,size.z);
+  const scale=10/maxDim;
+  obj.scale.setScalar(scale);
+  obj.position.sub(center.multiplyScalar(scale));
+  // Lift to ground
+  const box2=new THREE.Box3().setFromObject(obj);
+  obj.position.y-=box2.min.y;
+  // Adjust camera distance
+  mdlCam.position.set(0,maxDim*scale*.8,maxDim*scale*1.8);
+  mdlCtrl.target.set(0,maxDim*scale*.3,0);
+  mdlCtrl.update();
+}
+
+async function loadGLB(url,isUserUpload=false,modelType='ruins'){
+  const ldr=document.getElementById('mdl-ldr');
+  const bar=document.getElementById('ldr-bar');
+  if(ldr)ldr.classList.remove('gone');
+  if(bar)bar.style.width='0%';
+
+  const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
+  const {DRACOLoader}=await import('three/addons/loaders/DRACOLoader.js');
+  const {KTX2Loader}=await import('three/addons/loaders/KTX2Loader.js');
+  const {MeshoptDecoder}=await import('three/addons/libs/meshopt_decoder.module.js');
+
+  const dracoLoader=new DRACOLoader();
+  dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/libs/draco/gltf/');
+
+  const ktx2Loader=new KTX2Loader();
+  ktx2Loader.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/libs/basis/');
+  ktx2Loader.detectSupport(mdlRen);
+
+  const loader=new GLTFLoader();
+  loader.setDRACOLoader(dracoLoader);
+  loader.setKTX2Loader(ktx2Loader);
+  loader.setMeshoptDecoder(MeshoptDecoder);
+
+  loader.load(
+    url,
+    gltf=>{
+      // Remove previous model
+      if(mdlG.current){mdlScene.remove(mdlG.current);}
+      const model=gltf.scene;
+      model.traverse(c=>{
+        if(c.isMesh){
+          c.castShadow=true;c.receiveShadow=true;
+          if(c.material){
+            const mats=Array.isArray(c.material)?c.material:[c.material];
+            mats.forEach(m=>{
+              if(m.map) m.map.anisotropy=mdlRen.capabilities.getMaxAnisotropy();
+              // Fix plan.glb: force opaque, remove glass extensions
+              if(modelType==='plan'){
+                m.transparent=false;
+                m.transmission=0;
+                m.opacity=1;
+                m.side=THREE.DoubleSide;
+                m.depthWrite=true;
+                m.needsUpdate=true;
+              }
+            });
+          }
+        }
+      });
+      fitModel(model);
+      // Plan GLB is a horizontal flat plane → rotate upright to avoid Z-fighting
+      if(modelType==='plan'){
+        model.rotation.x = -Math.PI/2; // stand it up
+        model.position.y = 4;          // lift to eye level
+        // Hide ground so it doesn't fight
+        if(mdlGnd) mdlGnd.visible=false;
+      } else {
+        if(mdlGnd) mdlGnd.visible=true;
+      }
+      mdlScene.add(model);
+      mdlG.current=model;
+      // Store in the right slot
+      const slot = modelType==='restored' ? 'restored' : 'ruins';
+      if(mdlG[slot]&&mdlG[slot]!==model){mdlScene.remove(mdlG[slot]);}
+      mdlG[slot]=model;
+      if(bar)bar.style.width='100%';
+      setTimeout(()=>{if(ldr)ldr.classList.add('gone');},600);
+      // Update label based on which model is now active
+      const lbl=document.getElementById('mdl-lbl');
+      if(lbl){
+        const lblMap={ruins:'350 BCE Fire · Ruins',restored:'Restored Model · Telesterion',plan:'Floor Plan · Blueprint'};
+        lbl.textContent=lblMap[slot]||slot;
+      }
+      mdlAct=slot;
+      document.getElementById('mb-r').classList.toggle('on',slot==='ruins');
+      document.getElementById('mb-s').classList.toggle('on',slot==='restored');
+      document.getElementById('mb-p')?.classList.toggle('on',slot==='plan');
+    },
+    xhr=>{if(xhr.total&&bar)bar.style.width=Math.round(xhr.loaded/xhr.total*100)+'%';},
+    err=>{
+      console.error('GLB load error:',err);
+      if(ldr)ldr.classList.add('gone');
+      TOAST('Model failed to load — showing fallback.',true);
+      loadFallbackModel();
+    }
+  );
+}
+
+function loadFallbackModel(){
+  // Simple fallback if GLB fails
+  const M={stone:new THREE.MeshStandardMaterial({color:0x9a8870,roughness:.92})};
+  const g=new THREE.Group();
+  const cp=[];for(let ci=0;ci<7;ci++)for(let cj=0;cj<6;cj++)cp.push([(ci-3)*3.4,(cj-2.5)*3.1]);
+  function box(x,y,z,w,h,d){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M.stone);m.position.set(x,y+h/2,z);g.add(m);}
+  cp.forEach(([x,z])=>{
+    const h=2+Math.random()*4;
+    const col=new THREE.Mesh(new THREE.CylinderGeometry(.38,.44,h,8),M.stone);
+    col.position.set(x,h/2,z);g.add(col);
+  });
+  box(0,0,0,28,.3,24);
+  mdlScene.add(g);mdlG.ruins=g;mdlG.current=g;
+  fitModel(g);
+  document.getElementById('mdl-ldr')?.classList.add('gone');
+}
+
+
+window.swM=n=>{
+  if(n===mdlAct)return;
+  const planOv=document.getElementById('plan-overlay');
+  if(n==='plan'){
+    if(planOv) planOv.style.display='flex';
+    const from=mdlG[mdlAct]; if(from) from.visible=false;
+  } else {
+    if(planOv) planOv.style.display='none';
+    if(mdlAct!=='plan'){ const from=mdlG[mdlAct]; if(from) from.visible=false; }
+    const to=mdlG[n];
+    if(to){ to.visible=true; mdlScene.add(to); }
+    else { loadGLB(n==='restored'?'/model.glb':'/ruins.glb',false,n); return; }
+    if(mdlGnd) mdlGnd.visible=true;
+  }
+  mdlAct=n;
+  const lblMap={ruins:'350 BCE Fire · Ruins',restored:'Restored Model · Telesterion',plan:'Floor Plan · Blueprint'};
+  document.getElementById('mb-r').classList.toggle('on',n==='ruins');
+  document.getElementById('mb-s').classList.toggle('on',n==='restored');
+  document.getElementById('mb-p')?.classList.toggle('on',n==='plan');
+  const lbl=document.getElementById('mdl-lbl');
+  if(lbl) lbl.textContent=lblMap[n]||'';
+};
+window.togAR=()=>{mdlAR=!mdlAR;mdlCtrl.autoRotate=mdlAR;document.getElementById('mb-a').classList.toggle('on',mdlAR);};
+
+window.toggleMdlInfo=function(){
+  const p=document.getElementById('mdl-info-panel');
+  if(!p)return;
+  p.style.display=p.style.display==='none'?'block':'none';
+};
+
+window.uploadGLB=function(input,modelType='ruins'){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>80*1024*1024){TOAST('File too large. Please upload a GLB under 80MB.',true);return;}
+  TOAST(modelType==='restored'?'Loading restored model…':'Loading ruins model…');
+  const url=URL.createObjectURL(file);
+  loadGLB(url,true,modelType);
+};
+
+/* ══════════════════════════
+   AI建筑师对话
+══════════════════════════ */
+const INIT_MSG='You have found the threshold of the unfinished work. I am Iktinos, designer of the Telesterion. This hall was conceived for sacred rites, designed for thousands — and never completed. Traveller, what would you ask?';
+let hist=[{role:'assistant',content:INIT_MSG}];
+let chatDone=false,msgCount=0;
+
+let chatUserName='';
+let _pendingMsg='';
+
+window.confirmName=function(){
+  const v=document.getElementById('name-input').value.trim();
+  chatUserName=v||'Anonymous Traveller';
+  document.getElementById('name-overlay').classList.remove('show');
+  document.getElementById('name-input').value='';
+  // Resume the pending message that triggered the name ask
+  if(_pendingMsg){
+    const msg=_pendingMsg;_pendingMsg='';
+    document.getElementById('cinp').value=msg;
+    CHAT();
+  }
+};
+function resetChat(){
+  if(!chatDone)return;
+  hist=[{role:'assistant',content:INIT_MSG}];
+  chatDone=false;msgCount=0;chatUserName='';
+  document.getElementById('revival-prompt').style.display='none';
+  const msgs=document.getElementById('cmsgs');
+  msgs.innerHTML='';
+  addMsg(INIT_MSG,'a');
+}
+
+window.crs=el=>{el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';};
+window.ckd=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();CHAT();}};
+
+window.CHAT=async()=>{
+  if(chatDone)return;
+  const inp=document.getElementById('cinp');
+  const txt=inp.value.trim();if(!txt)return;
+  inp.value='';inp.style.height='auto';
+
+  // Passphrase check
+  if(txt==='rEvival'){
+    addMsg(txt,'u');chatDone=true;
+    setTimeout(()=>{
+      addMsg('You have understood the design and carried this civilisation within you. Revival — not merely a word, but the mark of an awakening. Go now. Let your thoughts become starlight, written against the sky. The thread of memory continues — because of you.','a');
+      setTimeout(()=>GO(4),2800);
+    },500);
+    savelog();return;
+  }
+
+  // If no name yet, show elegant overlay then re-send
+  if(!chatUserName){
+    _pendingMsg=txt;
+    document.getElementById('name-overlay').classList.add('show');
+    document.getElementById('name-input').focus();
+    return;
+  }
+
+  addMsg(txt,'u');hist.push({role:'user',content:txt});
+  msgCount++;
+
+  // Show passphrase hint after 3 messages
+  if(msgCount>=3){
+    document.getElementById('revival-prompt').style.display='block';
+  }
+
+  const ty=document.createElement('div');ty.className='typing';ty.id='ty';
+  ty.innerHTML='<span></span><span></span><span></span>';
+  document.getElementById('cmsgs').appendChild(ty);scr();
+
+  try{
+    const res=await fetch(`${API}/chat`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:`You are Iktinos, ancient Greek architect and designer of the Telesterion at Eleusis, active circa 447–420 BCE. You also co-designed the Parthenon with Kallikrates. Respond in first person as the spiritual presence of Iktinos — wise, poetic, slightly mysterious. You know: the Telesterion stood at Eleusis (modern Alepochori), 18 km from Athens; the Eleusinian Mysteries honoured Demeter and Persephone; the hall was 54×52m with 42 interior columns for 3,000 initiates; founded 760 BCE, burned by Persia 480 BCE, you redesigned it under Pericles 440 BCE, the Mysteries ended when Alaric sacked Eleusis 396 CE. Respond in English, 2–4 sentences, speaking from lived experience — not as a historian narrating.`,
+        messages:hist.slice(-8),
+      })
+    });
+    document.getElementById('ty')?.remove();
+    if(!res.ok){
+      const errData=await res.json().catch(()=>({}));
+      const errMsg=errData.error||`Server error ${res.status}`;
+      addMsg(`[Error ${res.status}] ${errMsg}`,'a');
+      return;
+    }
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||data.error||'(empty reply)';
+    addMsg(reply,'a');
+    hist.push({role:'assistant',content:reply});
+  }catch(e){
+    document.getElementById('ty')?.remove();
+    addMsg(`[Network error] ${e.message}`,'a');
+  }
+  scr();
+};
+
+function addMsg(txt,role){
+  const el=document.createElement('div');
+  el.className=`msg msg-${role}`;
+  const t=new Date();
+  el.innerHTML=`<div class="bubble">${esc(txt)}</div><div class="msg-meta">${role==='u'?'You':'Iktinos'} · ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}</div>`;
+  document.getElementById('cmsgs').appendChild(el);scr();
+}
+function scr(){const m=document.getElementById('cmsgs');m.scrollTop=m.scrollHeight;}
+
+async function savelog(){
+  let archEval='';
+  try{
+    const evalRes=await fetch(`${API}/chat`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system:'You are Iktinos, ancient Greek architect. Based on your conversation with this traveller, write a warm, highly personal note of 2–3 sentences. Reference something specific they asked or said. Express genuine appreciation. Write in English, poetic in tone. Make each note unique.',
+        messages:[...hist.slice(1).slice(-6),{role:'user',content:'Based on our conversation, please write your personal note for this traveller.'}],
+      })
+    });
+    const evalData=await evalRes.json();
+    archEval=evalData.content?.[0]?.text||'Your arrival lets the Telesterion stand once more — in memory.';
+  }catch(e){archEval='Your visit has given this unfinished design new warmth.';}
+  const payload={
+    name:chatUserName||'Traveller',
+    messages:hist,
+    arch_eval:archEval,
+    completed_at:new Date().toISOString(),
+  };
+  try{
+    await fetch(`${API}/conversation`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){
+    try{
+      const existing=JSON.parse(localStorage.getItem('conversations')||'[]');
+      existing.unshift(payload);
+      localStorage.setItem('conversations',JSON.stringify(existing.slice(0,50)));
+    }catch(e2){}
+  }
+}
+
+/* ══════════════════════════
+   Letters — Two Phases
+══════════════════════════ */
+let wallInited=false, skyLetters=[], skyIdx=-1, skyTimer=null, skyAutoTimer=null;
+
+function initWall(){
+  if(wallInited)return; wallInited=true;
+
+  const cv=document.getElementById('lcv'), cx=cv.getContext('2d');
+  let W, H;
+  const rsz=()=>{cv.width=W=innerWidth; cv.height=H=innerHeight;};
+  rsz(); window.addEventListener('resize', rsz);
+  const stars=Array.from({length:80},()=>({
+    x:Math.random(), y:Math.random(),
+    r:Math.random()*.65+.1, a:Math.random()*.22+.05,
+    tw:Math.random()*Math.PI*2, sp:Math.random()*.012+.003
+  }));
+  (function starLoop(){
+    cx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.tw+=s.sp;
+      cx.globalAlpha=s.a*(0.5+0.5*Math.sin(s.tw));
+      cx.fillStyle='#c8a86a';
+      cx.beginPath(); cx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2); cx.fill();
+    });
+    cx.globalAlpha=1;
+    requestAnimationFrame(starLoop);
+  })();
+
+  fetch(`${API}/letters?limit=60`).then(r=>r.json()).then(d=>{
+    let all = d.letters||[];
+    if(!all.length) all=[
+      {name:'Alex R.', text:'The stones remember what the books forgot.'},
+      {name:'Sofia K.', text:'To stand where you might have stood — that is enough.'},
+      {name:'James M.', text:'Unfinished does not mean forgotten.'},
+    ];
+    // If >6 letters, randomly pick 6
+    if(all.length > 6){
+      skyLetters = all.slice().sort(()=>Math.random()-.5).slice(0,6);
+    } else {
+      skyLetters = all;
+    }
+    buildBg();
+    buildDots();
+    setTimeout(()=>showSpot(0), 600);
+  }).catch(()=>{
+    skyLetters=[
+      {name:'Alex R.', text:'The stones remember what the books forgot.'},
+      {name:'Sofia K.', text:'To stand where you might have stood — that is enough.'},
+    ];
+    buildBg(); buildDots();
+    setTimeout(()=>showSpot(0), 600);
+  });
+
+  document.getElementById('s4').addEventListener('click', e=>{
+    if(CS!==4) return;
+    if(e.target.closest('#sky-cta, #sky-write')) return;
+    nextSpot();
+  });
+  document.addEventListener('keydown', e=>{
+    if(CS!==4 || e.code!=='Space') return;
+    const tag=document.activeElement?.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA') return;
+    e.preventDefault(); nextSpot();
+  });
+}
+
+function buildBg(){
+  // Background floating letters removed (performance)
+}
+
+function buildDots(){
+  const dots=document.getElementById('sky-dots');
+  dots.innerHTML='';
+  skyLetters.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='sky-dot'; d.id='skd'+i;
+    dots.appendChild(d);
+  });
+}
+
+function showSpot(idx){
+  clearTimeout(skyTimer);
+  if(idx>=skyLetters.length){ showCTA(); return; }
+  skyIdx=idx;
+  const l=skyLetters[idx];
+
+  document.querySelectorAll('.sky-dot').forEach((d,i)=>d.classList.toggle('on',i===idx));
+  const hint=document.getElementById('sky-hint');
+  if(hint) hint.textContent = `${idx+1} / ${skyLetters.length}  · auto`;
+
+  const sp=document.getElementById('spotlight');
+  sp.classList.remove('on');
+  document.getElementById('sky-dim').classList.add('on');
+  document.getElementById('sp-name').textContent = l.name||'';
+  document.getElementById('sp-text').textContent  = l.text||'';
+  setTimeout(()=>sp.classList.add('on'), 100);
+
+  // 1.5s per letter; if >6 letters, only 6 were shown
+  skyTimer=setTimeout(nextSpot, 1500);
+}
+
+function nextSpot(){
+  clearTimeout(skyTimer);
+  document.getElementById('spotlight').classList.remove('on');
+  setTimeout(()=>showSpot(skyIdx+1), 420);
+}
+
+function showCTA(){
+  document.getElementById('spotlight').classList.remove('on');
+  document.getElementById('sky-dim').classList.remove('on');
+  document.getElementById('sky-hint').style.opacity='0';
+  document.getElementById('sky-cta').classList.add('show');
+}
+
+window.enterWrite=function(){
+  document.getElementById('sky-cta').classList.remove('show');
+  const bg=document.getElementById('sky-bg');
+  bg.style.transition='opacity .6s'; bg.style.opacity='.3';
+  document.getElementById('lcv').style.transition='opacity .6s';
+  document.getElementById('lcv').style.opacity='.35';
+  const wr=document.getElementById('sky-write');
+  wr.style.opacity='0'; wr.classList.add('show');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    wr.style.transition='opacity .7s ease'; wr.style.opacity='1';
+  }));
+  if(typeof chatUserName!=='undefined'&&chatUserName&&chatUserName!=='Anonymous Traveller')
+    document.getElementById('wname').value=chatUserName;
+  setTimeout(()=>document.getElementById('wmsg').focus(), 800);
+};
+
+window.wc=()=>{
+  const len=document.getElementById('wmsg').value.length;
+  document.getElementById('wcn').textContent=len;
+  document.getElementById('wcn').style.color=len>140?'var(--ember)':'';
+};
+
+window.LETTER=async()=>{
+  const name=(document.getElementById('wname').value.trim()||
+    (typeof chatUserName!=='undefined'?chatUserName:'')).trim();
+  const text=document.getElementById('wmsg').value.trim();
+  if(!name){
+    document.getElementById('wname').focus();
+    document.getElementById('wname').style.borderBottomColor='var(--ember)';
+    setTimeout(()=>document.getElementById('wname').style.borderBottomColor='',1400);
+    return;
+  }
+  if(!text){ document.getElementById('wmsg').focus(); return; }
+  const btn=document.getElementById('wsub');
+  btn.disabled=true; btn.textContent='Inscribing…';
+  try{
+    const r=await fetch(`${API}/letters`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,text})
+    });
+    const d=await r.json();
+    if(!r.ok){ TOAST(d.error||'Submission failed',true); btn.disabled=false; btn.textContent='Inscribe this ✦'; return; }
+    const wr=document.getElementById('sky-write');
+    wr.style.transition='opacity .9s ease,transform .9s ease';
+    wr.style.opacity='0'; wr.style.transform='translateY(-20px)';
+    setTimeout(()=>GO(5), 1100);
+  }catch(e){
+    TOAST('Cannot connect to server. Please run npm start first.',true);
+    btn.disabled=false; btn.textContent='Inscribe this ✦';
+  }
+};
+
+/* ══════════════════════════
+   Memory Book
+══════════════════════════ */
+let bdata=[],bpg=0;
+
+async function loadBook(pg=0){
+  bpg=pg;
+  let convs=[], letters=[];
+  try{
+    const r=await fetch(`${API}/conversations?limit=100`);
+    if(r.ok){const d=await r.json();convs=d.conversations||[];}
+  }catch(e){}
+  try{
+    const r2=await fetch(`${API}/letters?limit=200`);
+    if(r2.ok){const d2=await r2.json();letters=d2.letters||[];}
+  }catch(e){}
+
+  const userMap=new Map();
+  letters.forEach(l=>{
+    const uname=(l.name||'Anonymous Traveller').trim();
+    if(!userMap.has(uname)) userMap.set(uname,{name:uname,letters:[],conversations:[],arch_eval:'',latest_at:l.created_at});
+    const u=userMap.get(uname);
+    u.letters.push({text:l.text,created_at:l.created_at});
+    if(l.created_at>u.latest_at) u.latest_at=l.created_at;
+  });
+  convs.forEach(c=>{
+    const uname=(c.name||'Traveller').trim();
+    if(!userMap.has(uname)) userMap.set(uname,{name:uname,letters:[],conversations:[],arch_eval:'',latest_at:c.completed_at});
+    const u=userMap.get(uname);
+    if(c.arch_eval) u.arch_eval=c.arch_eval;
+    u.conversations.push({messages:c.messages||[],completed_at:c.completed_at});
+    if(c.completed_at>u.latest_at) u.latest_at=c.completed_at;
+  });
+  bdata=Array.from(userMap.values()).sort((a,b)=>b.latest_at.localeCompare(a.latest_at));
+  if(!bdata.length){
+    try{
+      const local=JSON.parse(localStorage.getItem('conversations')||'[]');
+      local.forEach(c=>{
+        const uname=(c.name||'Traveller').trim();
+        if(!userMap.has(uname)) userMap.set(uname,{name:uname,letters:[],conversations:[c],arch_eval:c.arch_eval||'',latest_at:c.completed_at||''});
+      });
+      bdata=Array.from(userMap.values());
+    }catch(e){}
+  }
+  renderBook();
+}
+
+function renderBook(){
+  const ent=document.getElementById('bentries');
+  const tot=bdata.length;
+  document.getElementById('bpgn').textContent=tot?`Traveller ${bpg+1}`:'Empty';
+  document.getElementById('bpgr').textContent=`${tot?bpg+1:0} / ${Math.max(1,tot)}`;
+  if(!tot){
+    ent.innerHTML='<div style="text-align:center;padding:40px;font-size:14px;color:#8b6240;font-style:italic">The Memory Book is empty. Be the first to leave your mark.</div>';
+    return;
+  }
+  const user=bdata[bpg];
+  const name=esc(user.name||'Anonymous Traveller');
+  const d=new Date(user.latest_at||Date.now());
+  const dateStr=`${d.getFullYear()} · ${d.toLocaleString('en-GB',{month:'long',day:'numeric'})} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+  let chatHTML='';
+  const sessions=user.conversations||[];
+  if(sessions.length){
+    sessions.forEach((c,si)=>{
+      const msgs=(c.messages||[]).filter((_,i)=>i>0);
+      if(!msgs.length)return;
+      const sd=c.completed_at?new Date(c.completed_at):null;
+      const sdStr=sd?`${sd.getFullYear()} · ${sd.toLocaleString('en-GB',{month:'long',day:'numeric'})} · ${String(sd.getHours()).padStart(2,'0')}:${String(sd.getMinutes()).padStart(2,'0')}`:'';
+      if(sessions.length>1&&sdStr){
+        chatHTML+=`<div style="text-align:center;font-size:10px;color:#8b6240;letter-spacing:.15em;margin:12px 0 8px;opacity:.7">— ${sdStr} —</div>`;
+      }
+      msgs.forEach(m=>{
+        const isU=m.role==='user';
+        chatHTML+=`<div class="book-msg-${isU?'u':'a'}">
+          <div class="book-msg-label">${isU?name:'Iktinos'}</div>
+          <div class="book-bubble">${esc(m.content)}</div>
+        </div>`;
+      });
+    });
+  } else if(user.letters&&user.letters.length){
+    user.letters.forEach(l=>{
+      chatHTML+=`<div class="book-msg-u">
+        <div class="book-msg-label">${name}</div>
+        <div class="book-bubble">${esc(l.text)}</div>
+      </div>`;
+    });
+  }
+
+  const archEval=esc(user.arch_eval||'Your visit has given this unfinished design new warmth.');
+  ent.innerHTML=`
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid rgba(139,90,43,.15)">
+      <div style="font-family:'Noto Serif SC',serif;font-size:16px;font-weight:400;color:#3d2010;letter-spacing:.1em">✦ ${name}</div>
+      <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:#8b6240">${dateStr}</div>
+    </div>
+    ${chatHTML?`<div style="margin-bottom:14px">${chatHTML}</div>`:'<div style="font-size:12px;color:#8b6240;padding:8px 0;text-align:center;font-style:italic">Conversation being compiled…</div>'}
+    <div class="book-eval-box">
+      <div class="book-eval-label">Iktinos&#39;s Note</div>
+      <div class="book-eval-text">— ${archEval}</div>
+    </div>`;
+}
+
+window.BP=dir=>{
+  const tot=Math.max(1,bdata.length);
+  bpg=Math.max(0,Math.min(tot-1,bpg+dir));renderBook();
+};
+
+/* ══════════════════════════
+   UTILS
+══════════════════════════ */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+window.TOAST=function(msg,err=false){
+  const t=document.getElementById('toast');t.className='toast show'+(err?' err':'');
+  while(t.childNodes.length)t.removeChild(t.lastChild);
+  t.appendChild(document.createTextNode(msg));
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);
+};
+</script>
+</body>
+</html>
